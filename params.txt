@@ -1,0 +1,4 @@
+PROBLEM_FILE = problem.txt
+PRECISION = 50
+RUNS = 1
+TOUR_FILE = aaa.txt
