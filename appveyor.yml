@@ -12,9 +12,9 @@ environment:
 install:
   # We need wheel installed to build wheels
   - set PATH=%PYTHON%;%PATH%
-  - "rd \\q \\s dist 2>nul"
-  - "rd \\q \\s _skbuild 2>nul"
-  - "rd \\q \\s CMakeFiles 2>nul"
+  - "rd \\q \\s dist && exit 0"
+  - "rd \\q \\s _skbuild && exit 0"
+  - "rd \\q \\s CMakeFiles && exit 0"
   - "%PYTHON%\\python.exe -m pip install wheel"
   - "%PYTHON%\\python.exe -m pip install -r dev-requirements.txt"
 
