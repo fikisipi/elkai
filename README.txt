@@ -16,6 +16,14 @@ python setup.py install
 
 == How to use ==
 
+```
+import elkai
+elkai.solve([
+    1, 1,
+    1, 1
+]) # Output: [0, 1]
+```
+
 elkai.solve(x) solves an instance of the asymmetric TSP problem.
 
 Argument x:
@@ -31,11 +39,3 @@ Argument x:
 Return value:
   The tour, represented as a list of indices. The indices are
   zero-indexed and based on the distance matrix order.
-
-
-
->>> import elkai
->>> elkai.solve([
-    1, 1,
-    1, 1
-])
