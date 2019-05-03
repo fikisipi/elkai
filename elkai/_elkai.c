@@ -19,66 +19,71 @@ void ParseTour(int *outN, int *outBuff, int *Tour)
 
     n = ProblemType != ATSP ? Dimension : Dimension / 2;
 
-    for (i = 1; i < n && Tour[i] != 1; i++);
+    for (i = 1; i < n && Tour[i] != 1; i++)
+        ;
     Forwards = ProblemType == ATSP ||
-        Tour[i < n ? i + 1 : 1] < Tour[i > 1 ? i - 1 : Dimension];
-    for (j = 1; j <= n; j++) {
+               Tour[i < n ? i + 1 : 1] < Tour[i > 1 ? i - 1 : Dimension];
+    for (j = 1; j <= n; j++)
+    {
         outBuff[bufIdx] = Tour[i] - 1;
         bufIdx++;
-        if (Forwards) {
+        if (Forwards)
+        {
             if (++i > n)
                 i = 1;
-        } else if (--i < 1)
+        }
+        else if (--i < 1)
             i = n;
     }
     *outN = bufIdx;
 }
 static void CreateNodes()
 {
-	Node *Prev = 0, *N = 0;
-	int i;
+    Node *Prev = 0, *N = 0;
+    int i;
 
-	if (Dimension <= 0)
-		eprintf("DIMENSION is not positive (or not specified)");
-	if (ProblemType == ATSP)
-		Dimension *= 2;
-	else if (ProblemType == HPP) {
-		Dimension++;
-		if (Dimension > MaxMatrixDimension)
-			eprintf("Dimension too large in HPP problem");
-	}
-	assert(NodeSet = (Node *)calloc(Dimension + 1, sizeof(Node)));
-	for (i = 1; i <= Dimension; i++, Prev = N) {
-		N = &NodeSet[i];
-		if (i == 1)
-			FirstNode = N;
-		else
-			Link(Prev, N);
-		N->Id = i;
-		if (MergeTourFiles >= 1)
-			assert(N->MergeSuc =
-			(Node **)calloc(MergeTourFiles, sizeof(Node *)));
-	}
-	Link(N, FirstNode);
+    if (Dimension <= 0)
+        eprintf("DIMENSION is not positive (or not specified)");
+    if (ProblemType == ATSP)
+        Dimension *= 2;
+    else if (ProblemType == HPP)
+    {
+        Dimension++;
+        if (Dimension > MaxMatrixDimension)
+            eprintf("Dimension too large in HPP problem");
+    }
+    assert(NodeSet = (Node *)calloc(Dimension + 1, sizeof(Node)));
+    for (i = 1; i <= Dimension; i++, Prev = N)
+    {
+        N = &NodeSet[i];
+        if (i == 1)
+            FirstNode = N;
+        else
+            Link(Prev, N);
+        N->Id = i;
+        if (MergeTourFiles >= 1)
+            assert(N->MergeSuc =
+                       (Node **)calloc(MergeTourFiles, sizeof(Node *)));
+    }
+    Link(N, FirstNode);
 }
 
-static int FixEdge(Node * Na, Node * Nb)
+static int FixEdge(Node *Na, Node *Nb)
 {
-	if (!Na->FixedTo1 || Na->FixedTo1 == Nb)
-		Na->FixedTo1 = Nb;
-	else if (!Na->FixedTo2 || Na->FixedTo2 == Nb)
-		Na->FixedTo2 = Nb;
-	else
-		return 0;
-	if (!Nb->FixedTo1 || Nb->FixedTo1 == Na)
-		Nb->FixedTo1 = Na;
-	else if (!Nb->FixedTo2 || Nb->FixedTo1 == Na)
-		Nb->FixedTo2 = Na;
-	else
-		return 0;
-	return 1;
+    if (!Na->FixedTo1 || Na->FixedTo1 == Nb)
+        Na->FixedTo1 = Nb;
+    else if (!Na->FixedTo2 || Na->FixedTo2 == Nb)
+        Na->FixedTo2 = Nb;
+    else
+        return 0;
+    if (!Nb->FixedTo1 || Nb->FixedTo1 == Na)
+        Nb->FixedTo1 = Na;
+    else if (!Nb->FixedTo2 || Nb->FixedTo1 == Na)
+        Nb->FixedTo2 = Na;
+    else
+        return 0;
+    return 1;
 }
-
 
 void ReadParameters()
 {
@@ -150,10 +155,10 @@ void ReadParameters()
     TraceLevel = 1;
     LastLine = 0;
 
-	// Go here
-	Runs = 5;
-	Precision = 50;
-	TourFileName = "aaa2.txt";
+    // Go here
+    Runs = 5;
+    Precision = 50;
+    TourFileName = "aaa2.txt";
 }
 
 void ReadProblem(int *myMatrix, int matrixLen)
@@ -172,20 +177,20 @@ void ReadProblem(int *myMatrix, int matrixLen)
     C = 0;
     c = 0;
 
-	// Go here
-	ProblemType = ATSP;
-	Dimension = (int) sqrt(matrixLen);
+    // Go here
+    ProblemType = ATSP;
+    Dimension = (int)sqrt(matrixLen);
     DimensionSaved = Dimension;
-	WeightType = EXPLICIT;
-	Distance = Distance_EXPLICIT;
-	WeightFormat = FULL_MATRIX;
+    WeightType = EXPLICIT;
+    Distance = Distance_EXPLICIT;
+    WeightFormat = FULL_MATRIX;
     LoadWeightMatrix(myMatrix);
 
     Swaps = 0;
 
     /* Adjust parameters */
     if (Seed == 0)
-        Seed = (unsigned) time(0);
+        Seed = (unsigned)time(0);
     if (Precision == 0)
         Precision = 100;
     if (InitialStepSize == 0)
@@ -202,10 +207,12 @@ void ReadProblem(int *myMatrix, int matrixLen)
         ExtraCandidates = Dimension - 1;
     if (SubproblemSize >= Dimension)
         SubproblemSize = Dimension;
-    else if (SubproblemSize == 0) {
+    else if (SubproblemSize == 0)
+    {
         if (AscentCandidates > Dimension - 1)
             AscentCandidates = Dimension - 1;
-        if (InitialPeriod < 0) {
+        if (InitialPeriod < 0)
+        {
             InitialPeriod = Dimension / 2;
             if (InitialPeriod < 100)
                 InitialPeriod = 100;
@@ -222,29 +229,32 @@ void ReadProblem(int *myMatrix, int matrixLen)
         POPMUSIC_SampleSize = Dimension;
     if (CostMatrix == 0 && Dimension <= MaxMatrixDimension &&
         Distance != 0 && Distance != Distance_1 && Distance != Distance_LARGE &&
-        Distance != Distance_ATSP && Distance != Distance_SPECIAL) {
+        Distance != Distance_ATSP && Distance != Distance_SPECIAL)
+    {
         Node *Ni, *Nj;
         assert(CostMatrix =
-               (int *) calloc((size_t) Dimension * (Dimension - 1) / 2,
-                              sizeof(int)));
+                   (int *)calloc((size_t)Dimension * (Dimension - 1) / 2,
+                                 sizeof(int)));
         Ni = FirstNode->Suc;
-        do {
+        do
+        {
             Ni->C =
-                &CostMatrix[(size_t) (Ni->Id - 1) * (Ni->Id - 2) / 2] - 1;
+                &CostMatrix[(size_t)(Ni->Id - 1) * (Ni->Id - 2) / 2] - 1;
             if (ProblemType != HPP || Ni->Id < Dimension)
                 for (Nj = FirstNode; Nj != Ni; Nj = Nj->Suc)
                     Ni->C[Nj->Id] = Fixed(Ni, Nj) ? 0 : Distance(Ni, Nj);
             else
                 for (Nj = FirstNode; Nj != Ni; Nj = Nj->Suc)
                     Ni->C[Nj->Id] = 0;
-        }
-        while ((Ni = Ni->Suc) != FirstNode);
+        } while ((Ni = Ni->Suc) != FirstNode);
         WeightType = EXPLICIT;
         c = 0;
     }
-    if (Precision > 1 && (WeightType == EXPLICIT || ProblemType == ATSP)) {
+    if (Precision > 1 && (WeightType == EXPLICIT || ProblemType == ATSP))
+    {
         int j, n = ProblemType == ATSP ? Dimension / 2 : Dimension;
-        for (i = 2; i <= n; i++) {
+        for (i = 2; i <= n; i++)
+        {
             Node *N = &NodeSet[i];
             for (j = 1; j < i; j++)
                 if (N->C[j] * Precision / Precision != N->C[j])
@@ -255,8 +265,7 @@ void ReadProblem(int *myMatrix, int matrixLen)
     D = WeightType == EXPLICIT ? D_EXPLICIT : D_FUNCTION;
     if (SubsequentMoveType == 0)
         SubsequentMoveType = MoveType;
-    K = MoveType >= SubsequentMoveType
-        || !SubsequentPatching ? MoveType : SubsequentMoveType;
+    K = MoveType >= SubsequentMoveType || !SubsequentPatching ? MoveType : SubsequentMoveType;
     if (PatchingC > K)
         PatchingC = K;
     if (PatchingA > 1 && PatchingA >= PatchingC)
@@ -264,74 +273,84 @@ void ReadProblem(int *myMatrix, int matrixLen)
     if (NonsequentialMoveType == -1 ||
         NonsequentialMoveType > K + PatchingC + PatchingA - 1)
         NonsequentialMoveType = K + PatchingC + PatchingA - 1;
-    if (PatchingC >= 1) {
+    if (PatchingC >= 1)
+    {
         BestMove = BestSubsequentMove = BestKOptMove;
-        if (!SubsequentPatching && SubsequentMoveType <= 5) {
+        if (!SubsequentPatching && SubsequentMoveType <= 5)
+        {
             MoveFunction BestOptMove[] =
-                { 0, 0, Best2OptMove, Best3OptMove,
-                Best4OptMove, Best5OptMove
-            };
+                {0, 0, Best2OptMove, Best3OptMove,
+                 Best4OptMove, Best5OptMove};
             BestSubsequentMove = BestOptMove[SubsequentMoveType];
         }
-    } else {
-        MoveFunction BestOptMove[] = { 0, 0, Best2OptMove, Best3OptMove,
-            Best4OptMove, Best5OptMove
-        };
+    }
+    else
+    {
+        MoveFunction BestOptMove[] = {0, 0, Best2OptMove, Best3OptMove,
+                                      Best4OptMove, Best5OptMove};
         BestMove = MoveType <= 5 ? BestOptMove[MoveType] : BestKOptMove;
-        BestSubsequentMove = SubsequentMoveType <= 5 ?
-            BestOptMove[SubsequentMoveType] : BestKOptMove;
+        BestSubsequentMove = SubsequentMoveType <= 5 ? BestOptMove[SubsequentMoveType] : BestKOptMove;
     }
     if (ProblemType == HCP || ProblemType == HPP)
         MaxCandidates = 0;
-    if (TraceLevel >= 1) {
+    if (TraceLevel >= 1)
+    {
     }
     if (InitialTourFileName)
-		printf("initial tour name\n");
+        printf("initial tour name\n");
     if (InputTourFileName)
-		printf("input tour name\n");
+        printf("input tour name\n");
     if (SubproblemTourFileName && SubproblemSize > 0)
-		printf("subproblem tour name\n");
-    if (MergeTourFiles >= 1) {
-		printf("merge files");
+        printf("subproblem tour name\n");
+    if (MergeTourFiles >= 1)
+    {
+        printf("merge files");
     }
     LastLine = 0;
 }
 
 static void LoadWeightMatrix(int *_wArr)
 {
-	int _wArrIndex = 0;
+    int _wArrIndex = 0;
     Node *Ni, *Nj;
     int i, j, n, W;
 
     if (!FirstNode)
         CreateNodes();
-    if (ProblemType != ATSP) {
+    if (ProblemType != ATSP)
+    {
         assert(CostMatrix =
-               (int *) calloc((size_t) Dimension * (Dimension - 1) / 2,
-                              sizeof(int)));
+                   (int *)calloc((size_t)Dimension * (Dimension - 1) / 2,
+                                 sizeof(int)));
         Ni = FirstNode->Suc;
-        do {
+        do
+        {
             Ni->C =
-                &CostMatrix[(size_t) (Ni->Id - 1) * (Ni->Id - 2) / 2] - 1;
-        }
-        while ((Ni = Ni->Suc) != FirstNode);
-    } else {
+                &CostMatrix[(size_t)(Ni->Id - 1) * (Ni->Id - 2) / 2] - 1;
+        } while ((Ni = Ni->Suc) != FirstNode);
+    }
+    else
+    {
         n = Dimension / 2;
-        assert(CostMatrix = (int *) calloc((size_t) n * n, sizeof(int)));
+        assert(CostMatrix = (int *)calloc((size_t)n * n, sizeof(int)));
         for (Ni = FirstNode; Ni->Id <= n; Ni = Ni->Suc)
-            Ni->C = &CostMatrix[(size_t) (Ni->Id - 1) * n] - 1;
+            Ni->C = &CostMatrix[(size_t)(Ni->Id - 1) * n] - 1;
     }
     if (ProblemType == HPP)
         Dimension--;
-    switch (1) {
+    switch (1)
+    {
     case 1:
-        if (ProblemType == ATSP) {
+        if (ProblemType == ATSP)
+        {
             n = Dimension / 2;
-            for (i = 1; i <= n; i++) {
+            for (i = 1; i <= n; i++)
+            {
                 Ni = &NodeSet[i];
-                for (j = 1; j <= n; j++) {
-					W = _wArr[_wArrIndex];
-					_wArrIndex++;
+                for (j = 1; j <= n; j++)
+                {
+                    W = _wArr[_wArrIndex];
+                    _wArrIndex++;
                     if (W > INT_MAX / 2 / Precision)
                         W = INT_MAX / 2 / Precision;
                     Ni->C[j] = W;
@@ -343,11 +362,14 @@ static void LoadWeightMatrix(int *_wArr)
             }
             Distance = Distance_ATSP;
             WeightType = -1;
-        } else
-            for (i = 1, Ni = FirstNode; i <= Dimension; i++, Ni = Ni->Suc) {
-                for (j = 1; j <= Dimension; j++) {
-					W = _wArr[_wArrIndex];
-					_wArrIndex++;
+        }
+        else
+            for (i = 1, Ni = FirstNode; i <= Dimension; i++, Ni = Ni->Suc)
+            {
+                for (j = 1; j <= Dimension; j++)
+                {
+                    W = _wArr[_wArrIndex];
+                    _wArrIndex++;
                     if (W > INT_MAX / 2 / Precision)
                         W = INT_MAX / 2 / Precision;
                     if (j < i)
@@ -363,41 +385,47 @@ int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
 {
     GainType Cost, OldOptimum;
     double Time, LastTime = GetTime();
-	ReadParameters();
-	MaxMatrixDimension = 20000;
-	MergeWithTour = Recombination == IPT ? MergeWithTourIPT :
-		MergeWithTourGPX2;
-	ReadProblem(matrixBuff, matrixLen);
+    ReadParameters();
+    MaxMatrixDimension = 20000;
+    MergeWithTour = Recombination == IPT ? MergeWithTourIPT : MergeWithTourGPX2;
+    ReadProblem(matrixBuff, matrixLen);
 
-	AllocateStructures();
-	TraceLevel = 1000;
-	CandidateFiles = 0;
-	PiFileName = 0;
-	EdgeFiles = 0;
-	CreateCandidateSet();
-	InitializeStatistics();
+    AllocateStructures();
+    TraceLevel = 1000;
+    CandidateFiles = 0;
+    PiFileName = 0;
+    EdgeFiles = 0;
+    CreateCandidateSet();
+    InitializeStatistics();
 
-    if(Norm == 0) {
-        Optimum = BestCost = (GainType) LowerBound;
+    if (Norm == 0)
+    {
+        Optimum = BestCost = (GainType)LowerBound;
         UpdateStatistics(Optimum, GetTime() - LastTime);
         RecordBetterTour();
         RecordBestTour();
         ParseTour(tourN, tourBuff, BestTour);
         return 0;
-    } else {
+    }
+    else
+    {
         BestCost = PLUS_INFINITY;
     }
 
-    for (Run = 1; Run <= Runs; Run++) {
+    for (Run = 1; Run <= Runs; Run++)
+    {
         LastTime = GetTime();
-        Cost = FindTour();      /* using the Lin-Kernighan heuristic */
-        if (MaxPopulationSize > 1) {
+        Cost = FindTour(); /* using the Lin-Kernighan heuristic */
+        if (MaxPopulationSize > 1)
+        {
             /* Genetic algorithm */
             int i;
-            for (i = 0; i < PopulationSize; i++) {
+            for (i = 0; i < PopulationSize; i++)
+            {
                 GainType OldCost = Cost;
                 Cost = MergeTourWithIndividual(i);
-                if (TraceLevel >= 1 && Cost < OldCost) {
+                if (TraceLevel >= 1 && Cost < OldCost)
+                {
                     printff("  Merged with %d: Cost = " GainFormat, i + 1,
                             Cost);
                     if (Optimum != MINUS_INFINITY && Optimum != 0)
@@ -406,41 +434,47 @@ int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
                     printff("\n");
                 }
             }
-            if (!HasFitness(Cost)) {
-                if (PopulationSize < MaxPopulationSize) {
+            if (!HasFitness(Cost))
+            {
+                if (PopulationSize < MaxPopulationSize)
+                {
                     AddToPopulation(Cost);
                     if (TraceLevel >= 1)
                         PrintPopulation();
-                } else if (Cost < Fitness[PopulationSize - 1]) {
+                }
+                else if (Cost < Fitness[PopulationSize - 1])
+                {
                     i = ReplacementIndividual(Cost);
                     ReplaceIndividualWithTour(i, Cost);
                     if (TraceLevel >= 1)
                         PrintPopulation();
                 }
             }
-        } else if (Run > 1)
+        }
+        else if (Run > 1)
             Cost = MergeTourWithBestTour();
-        if (Cost < BestCost) {
+        if (Cost < BestCost)
+        {
             BestCost = Cost;
             RecordBetterTour();
             RecordBestTour();
-            /*
-            WriteTour(OutputTourFileName, BestTour, BestCost);
-            WriteTour(TourFileName, BestTour, BestCost);
-            */
         }
         OldOptimum = Optimum;
-        if (Cost < Optimum) {
-            if (FirstNode->InputSuc) {
+        if (Cost < Optimum)
+        {
+            if (FirstNode->InputSuc)
+            {
                 Node *N = FirstNode;
-                while ((N = N->InputSuc = N->Suc) != FirstNode);
+                while ((N = N->InputSuc = N->Suc) != FirstNode)
+                    ;
             }
             Optimum = Cost;
             printff("*** New optimum = " GainFormat " ***\n\n", Optimum);
         }
         Time = fabs(GetTime() - LastTime);
         UpdateStatistics(Cost, Time);
-        if (TraceLevel >= 1 && Cost != PLUS_INFINITY) {
+        if (TraceLevel >= 1 && Cost != PLUS_INFINITY)
+        {
             printff("Run %d: Cost = " GainFormat, Run, Cost);
             if (Optimum != MINUS_INFINITY && Optimum != 0)
                 printff(", Gap = %0.4f%%",
@@ -448,13 +482,16 @@ int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
             printff(", Time = %0.2f sec. %s\n\n", Time,
                     Cost < Optimum ? "<" : Cost == Optimum ? "=" : "");
         }
-        if (StopAtOptimum && Cost == OldOptimum && MaxPopulationSize >= 1) {
+        if (StopAtOptimum && Cost == OldOptimum && MaxPopulationSize >= 1)
+        {
             Runs = Run;
             break;
         }
         if (PopulationSize >= 2 &&
             (PopulationSize == MaxPopulationSize ||
-             Run >= 2 * MaxPopulationSize) && Run < Runs) {
+             Run >= 2 * MaxPopulationSize) &&
+            Run < Runs)
+        {
             Node *N;
             int Parent1, Parent2;
             Parent1 = LinearSelection(PopulationSize, 1.25);
@@ -463,74 +500,74 @@ int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
             while (Parent2 == Parent1);
             ApplyCrossover(Parent1, Parent2);
             N = FirstNode;
-            do {
-                if (ProblemType != HCP && ProblemType != HPP) {
+            do
+            {
+                if (ProblemType != HCP && ProblemType != HPP)
+                {
                     int d = C(N, N->Suc);
                     AddCandidate(N, N->Suc, d, INT_MAX);
                     AddCandidate(N->Suc, N, d, INT_MAX);
                 }
                 N = N->InitialSuc = N->Suc;
-            }
-            while (N != FirstNode);
+            } while (N != FirstNode);
         }
         SRandom(++Seed);
     }
-   ParseTour(tourN, tourBuff, BestTour);
-   return Norm;
-
+    ParseTour(tourN, tourBuff, BestTour);
+    return Norm;
 }
 
-static PyObject* elk_solve(PyObject* self, PyObject *arg)
+static PyObject *elk_solve(PyObject *self, PyObject *arg)
 {
     int pyLen = PyObject_Length(arg);
-    int pyLenSqrt = (int) sqrt(pyLen);
-    if(pyLen < 4 || pyLenSqrt * pyLenSqrt != pyLen) {
-        PyErr_SetString(PyExc_ValueError, "Argument should be a list with N^2 >= 4 elements.\n"\
-        "Example: [1, 1, 1, 1].");
+    int pyLenSqrt = (int)sqrt(pyLen);
+    if (pyLen < 4 || pyLenSqrt * pyLenSqrt != pyLen)
+    {
+        PyErr_SetString(PyExc_ValueError, "Argument should be a list with N^2 >= 4 elements.\n"
+                                          "Example: [1, 1, 1, 1].");
         return 0;
     }
-    int *matrixBuff = (int*) malloc(sizeof(int) * pyLen);
-    int *tourBuff = (int*) malloc(sizeof(int) * pyLenSqrt);
+    int *matrixBuff = (int *)malloc(sizeof(int) * pyLen);
+    int *tourBuff = (int *)malloc(sizeof(int) * pyLenSqrt);
     int tourN = 0;
 
-    for(long i = 0; i < pyLen; i++) {
+    for (long i = 0; i < pyLen; i++)
+    {
         PyObject *pyNumber = PyObject_GetItem(arg, PyLong_FromLong(i));
         long long justNumber = PyLong_AsLongLong(pyNumber);
-        int justNumber_i = (int) justNumber;
+        int justNumber_i = (int)justNumber;
         // TODO: don't lose precision
         matrixBuff[i] = justNumber_i;
     }
-   int norm_result = m_calculate(matrixBuff, pyLen, tourBuff, &tourN);
-   free(matrixBuff);
-   PyObject *list = PyList_New(tourN);
-   for(int i = 0; i < tourN; i++) {
-       PyObject *tourElement = PyLong_FromLong((long)tourBuff[i]);
-       PyList_SetItem(list, i, tourElement);
-   }
+    int norm_result = m_calculate(matrixBuff, pyLen, tourBuff, &tourN);
+    free(matrixBuff);
+    PyObject *list = PyList_New(tourN);
+    for (int i = 0; i < tourN; i++)
+    {
+        PyObject *tourElement = PyLong_FromLong((long)tourBuff[i]);
+        PyList_SetItem(list, i, tourElement);
+    }
 
     free(tourBuff);
-   printf("norm = %d\n", norm_result);
-   return list;
+    return list;
 }
 
 static char elk_docs[] =
-   "solve(x): Solve a TSP problem.\n";
+    "solve(x): Solve a TSP problem.\n";
 
 static PyMethodDef funcs[] = {
-   {"solve", (PyCFunction)elk_solve, 
-   METH_O, elk_docs},
-   {NULL}
-};
+    {"solve", (PyCFunction)elk_solve,
+     METH_O, elk_docs},
+    {NULL}};
 
 static struct PyModuleDef hello_module_def = {
-  PyModuleDef_HEAD_INIT,
-  "_elkai",
-  "",
-  -1,
-  funcs
-};
+    PyModuleDef_HEAD_INIT,
+    "_elkai",
+    "",
+    -1,
+    funcs};
 
 PyMODINIT_FUNC PyInit__elkai(void)
 {
-  return PyModule_Create(&hello_module_def);
+    return PyModule_Create(&hello_module_def);
 }
