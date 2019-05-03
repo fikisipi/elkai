@@ -554,7 +554,8 @@ static PyObject *elk_solve(PyObject *self, PyObject *arg)
     int *tourBuff = (int *)malloc(sizeof(int) * pyLenSqrt);
     int tourN = 0;
 
-    for (long i = 0; i < pyLen; i++)
+    long i;
+    for (i = 0; i < pyLen; i++)
     {
         PyObject *pyNumber = PyObject_GetItem(arg, PyLong_FromLong(i));
         long long justNumber = PyLong_AsLongLong(pyNumber);
