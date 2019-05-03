@@ -8,7 +8,10 @@
  * The function is called from CreateCandidateSet.
  */
 
-static int Level = 0;
+int DenaLevel = 0;
+void _Reset2() {
+    DenaLevel = 0;
+}
 
 void CreateDelaunayCandidateSet()
 {
@@ -19,7 +22,7 @@ void CreateDelaunayCandidateSet()
 
     if (TraceLevel >= 2)
         printff("Creating Delaunay candidate set ... ");
-    if (Level == 0 && MaxCandidates == 0) {
+    if (DenaLevel == 0 && MaxCandidates == 0) {
         AddTourCandidates();
         From = FirstNode;
         do {
@@ -51,7 +54,7 @@ void CreateDelaunayCandidateSet()
         } while ((e = Next(e, u)) != e_start && ++Count < Dimension);
     }
     free_memory();
-    if (Level == 0 &&
+    if (DenaLevel == 0 &&
         (WeightType == GEO || WeightType == GEOM ||
          WeightType == GEO_MEEUS || WeightType == GEOM_MEEUS)) {
         if (TraceLevel >= 2)
@@ -75,16 +78,16 @@ void CreateDelaunayCandidateSet()
                         (int) From->Y + 3.0 * (From->Y -
                                                (int) From->Y) / 5.0;
             } while ((From = From->Suc) != FirstNode);
-            Level++;
+            DenaLevel++;
             CreateDelaunayCandidateSet();
-            Level--;
+            DenaLevel--;
             From = FirstNode;
             do
                 From->Y = From->Zc;
             while ((From = From->Suc) != FirstNode);
         }
     }
-    if (Level == 0) {
+    if (DenaLevel == 0) {
         AddTourCandidates();
         if (ExtraCandidates < 2) {
             /* Add quadrant neighbors if any node has less than two candidates.

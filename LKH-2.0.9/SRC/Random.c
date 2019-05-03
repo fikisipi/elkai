@@ -38,7 +38,12 @@ void SRandom(unsigned Seed)
 #include <limits.h>
 #define PRANDMAX INT_MAX
 
-static int a = 0, b = 24, arr[55], initialized = 0;
+int a = 0, b = 24, arr[55], initialized = 0;
+void _Reset6() {
+    a = 0;
+    b = 24;
+    initialized = 0;
+}
 
 unsigned Random()
 {

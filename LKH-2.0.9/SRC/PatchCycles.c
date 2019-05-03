@@ -21,7 +21,12 @@ static GainType PatchCyclesRec(int k, int m, int M, GainType G0);
 static int ShortestCycle(int M, int k);
 static int Cycle(Node * N, int k);
 
-static int CurrentCycle, Patchwork = 0, RecLevel = 0;
+int CurrentCycle, Patchwork = 0, RecLevel = 0;
+void _Reset5() {
+    CurrentCycle = 0;
+    Patchwork = 0;
+    RecLevel = 0;
+}
 #define MaxPatchwork Dimension
 
 /*

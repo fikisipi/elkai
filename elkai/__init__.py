@@ -1,5 +1,6 @@
 from ._elkai import solve
 
-def demo_run():
+demo_list = [x for x in range(10000)]
+def demo():
     """Run a random N=10000 example."""
-    return solve([x for x in range(10000)])
+    return solve(demo_list)

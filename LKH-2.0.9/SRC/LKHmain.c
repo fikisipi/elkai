@@ -5,7 +5,7 @@
  * This file contains the main function of the program.
  */
 
-int main(int argc, char *argv[])
+int __othermain(int argc, char *argv[])
 {
     GainType Cost, OldOptimum;
     double Time, LastTime = GetTime();

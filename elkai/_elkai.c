@@ -380,8 +380,27 @@ static void LoadWeightMatrix(int *_wArr)
     if (ProblemType == HPP)
         Dimension++;
 }
+
+void _Reset1();
+void _Reset2();
+void _Reset3();
+void _Reset4();
+void _Reset5();
+void _Reset6();
+void _Reset7();
+void _Reset8();
+
 int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
 {
+    _Reset1();
+    _Reset2();
+    _Reset3();
+    _Reset4();
+    _Reset5();
+    _Reset6();
+    _Reset7();
+    _Reset8();
+
     GainType Cost, OldOptimum;
     double Time, LastTime = GetTime();
     ReadParameters();

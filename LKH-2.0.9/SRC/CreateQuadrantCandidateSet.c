@@ -21,7 +21,11 @@ static double *XMin, *XMax, *YMin, *YMax, *ZMin, *ZMax;
 static int Candidates, Radius;
 static ContainsFunction Contains;
 static BoxOverlapsFunction BoxOverlaps;
-static int Level = 0;
+int QLevel = 0;
+
+void _Reset3() {
+    QLevel = 0;
+}
 
 /*
  * The CreateQuadrantCandidateSet function creates for each node 
@@ -106,7 +110,7 @@ void CreateQuadrantCandidateSet(int K)
         free(ZMin);
         free(ZMax);
     }
-    if (Level == 0 &&
+    if (QLevel == 0 &&
         (WeightType == GEO || WeightType == GEOM ||
          WeightType == GEO_MEEUS || WeightType == GEOM_MEEUS)) {
         Candidate **SavedCandidateSet;
@@ -136,9 +140,9 @@ void CreateQuadrantCandidateSet(int K)
                         (int) From->Y + 3.0 * (From->Y -
                                                (int) From->Y) / 5.0;
             } while ((From = From->Suc) != FirstNode);
-            Level++;
+            QLevel++;
             CreateQuadrantCandidateSet(K);
-            Level--;
+            QLevel--;
             From = FirstNode;
             do
                 From->Y = From->Zc;
@@ -153,7 +157,7 @@ void CreateQuadrantCandidateSet(int K)
             free(SavedCandidateSet);
         }
     }
-    if (Level == 0) {
+    if (QLevel == 0) {
         ResetCandidateSet();
         AddTourCandidates();
         if (CandidateSetSymmetric)
@@ -219,7 +223,7 @@ void CreateNearestNeighborCandidateSet(int K)
         free(ZMin);
         free(ZMax);
     }
-    if (Level == 0 && (WeightType == GEOM || WeightType == GEOM_MEEUS)) {
+    if (QLevel == 0 && (WeightType == GEOM || WeightType == GEOM_MEEUS)) {
         Candidate **SavedCandidateSet;
         assert(SavedCandidateSet =
                (Candidate **) malloc((1 + DimensionSaved) *
@@ -234,9 +238,9 @@ void CreateNearestNeighborCandidateSet(int K)
             From->Yc = From->Y;
             From->Y += From->Y > 0 ? -180 : 180;
         } while ((From = From->Suc) != FirstNode);
-        Level++;
+        QLevel++;
         CreateNearestNeighborCandidateSet(K);
-        Level--;
+        QLevel--;
         From = FirstNode;
         do
             From->Y = From->Yc;
@@ -251,7 +255,7 @@ void CreateNearestNeighborCandidateSet(int K)
         } while ((From = From->Suc) != FirstNode);
         free(SavedCandidateSet);
     }
-    if (Level == 0) {
+    if (QLevel == 0) {
         ResetCandidateSet();
         AddTourCandidates();
         if (CandidateSetSymmetric)

@@ -254,9 +254,12 @@ GainType GreedyTour()
  * determines the true nearest neighbors (for example, by using a KD-tree).
  */
 
+int mark = 0;
+void _Reset4() {
+    mark = 0;
+}
 static Node *NearestNeighbor(Node * From)
 {
-    static int mark = 0;
     Candidate *NN;
     Node *To, *N, *First = 0, *Last = 0, *Nearest = 0;
     int MaxLevel = Dimension, Min = INT_MAX, d;

@@ -17,7 +17,10 @@
  *     BETWEEN(t[p[i-1]], t[p[i]], t[p[i+1]]) for i = 2, ..., 2k-1
  */
 
-static Node *tp1;
+Node *tp1;
+void _Reset8() {
+    tp1 = 0;
+}
 
 static int compare(const void *pa, const void *pb)
 {
