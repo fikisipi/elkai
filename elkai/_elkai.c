@@ -161,7 +161,7 @@ void ReadParameters()
     TourFileName = "aaa2.txt";
 }
 
-void ReadProblem(int *myMatrix, int matrixLen)
+void _elk_ReadProblem(int *myMatrix, int matrixLen)
 {
     int i, K;
     char *Line, *Keyword;
@@ -388,7 +388,7 @@ int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
     ReadParameters();
     MaxMatrixDimension = 20000;
     MergeWithTour = Recombination == IPT ? MergeWithTourIPT : MergeWithTourGPX2;
-    ReadProblem(matrixBuff, matrixLen);
+    _elk_ReadProblem(matrixBuff, matrixLen);
 
     AllocateStructures();
     TraceLevel = 1000;

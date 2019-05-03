@@ -7,9 +7,10 @@ do "pip install elkai"
 
 == How to install ==
 
-1. Make sure you have Python 3 and CMake
+1. Make sure you have Python 3 and a C compiler (MSVC, gcc, clang)
 2. Run the following
 
+pip install cmake
 pip install scikit-build
 python setup.py install
 
