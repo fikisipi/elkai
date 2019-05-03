@@ -2,20 +2,20 @@ elkai is a Python 3 TSP solver without external dependencies,
 based on LKH (http://akira.ruc.dk/~keld/research/LKH/) by
 K. Helsgaun, PhD.
 
+TODO: Upload to pypi and add binary wheels so that you can just 
+do "pip install elkai"
+
 == How to install ==
 
 1. Make sure you have Python 3 and CMake
 2. Run the following
 
 pip install scikit-build
-python setup.py test
-
-TODO: Upload to pypi and add binary wheels so that you can just 
-do "pip install elkai"
+python setup.py install
 
 == How to use ==
 
-elkai.solve(x) solves an instance of the assymetric TSP problem.
+elkai.solve(x) solves an instance of the asymmetric TSP problem.
 
 Argument x:
    A 1D array representing a integer distance matrix between
@@ -38,4 +38,3 @@ Return value:
     1, 1,
     1, 1
 ])
-[0, 1]

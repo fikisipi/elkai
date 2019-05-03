@@ -4,6 +4,11 @@
 #include "math.h"
 #include "Heap.h"
 
+// TODO:
+// - Delete obsolete problem types
+// - Make sure camel case is used everywhere
+// - Use git submodule instead of a LKH copy
+
 static void LoadWeightMatrix(int *_wArr);
 void ParseTour(int *outN, int *outBuff, int *Tour)
 {
@@ -74,72 +79,6 @@ static int FixEdge(Node * Na, Node * Nb)
 	return 1;
 }
 
-
-static void LoadWeights(int *ww)
-{
-	Node *Ni, *Nj;
-	int i, j, n, W;
-	if (!FirstNode)
-		CreateNodes();
-	if (ProblemType != ATSP) {
-		assert(CostMatrix =
-			(int *)calloc((size_t)Dimension * (Dimension - 1) / 2,
-				sizeof(int)));
-		Ni = FirstNode->Suc;
-		do {
-			Ni->C =
-				&CostMatrix[(size_t)(Ni->Id - 1) * (Ni->Id - 2) / 2] - 1;
-		} while ((Ni = Ni->Suc) != FirstNode);
-	}
-	else {
-		n = Dimension / 2;
-		assert(CostMatrix = (int *)calloc((size_t)n * n, sizeof(int)));
-		for (Ni = FirstNode; Ni->Id <= n; Ni = Ni->Suc)
-			Ni->C = &CostMatrix[(size_t)(Ni->Id - 1) * n] - 1;
-	}
-	if (ProblemType == HPP)
-		Dimension--;
-	if (ProblemType == ATSP) {
-		n = Dimension / 2;
-		for (i = 1; i <= n; i++) {
-			Ni = &NodeSet[i];
-			for (j = 1; j <= n; j++) {
-				/*
-				if (!fscanint(ProblemFile, &W))
-					eprintf("Missing weight in EDGE_WEIGHT_SECTION");
-					*/
-				W = *ww;
-				ww++;
-				if (W > INT_MAX / 2 / Precision)
-					W = INT_MAX / 2 / Precision;
-				Ni->C[j] = W;
-				if (i != j && W > M)
-					M = W;
-			}
-			Nj = &NodeSet[i + n];
-			FixEdge(Ni, Nj);
-		}
-		Distance = Distance_ATSP;
-		WeightType = -1;
-	}
-	else
-		for (i = 1, Ni = FirstNode; i <= Dimension; i++, Ni = Ni->Suc) {
-			for (j = 1; j <= Dimension; j++) {
-				/*
-				if (!fscanint(ProblemFile, &W))
-					eprintf("Missing weight in EDGE_WEIGHT_SECTION");
-					*/
-				W = *ww;
-				ww++;
-				if (W > INT_MAX / 2 / Precision)
-					W = INT_MAX / 2 / Precision;
-				if (j < i)
-					Ni->C[j] = W;
-			}
-		}
-	if (ProblemType == HPP)
-		Dimension++;
-}
 
 void ReadParameters()
 {
@@ -575,7 +514,7 @@ static PyObject* elk_solve(PyObject* self, PyObject *arg)
 }
 
 static char elk_docs[] =
-   "solve( ): Solve a TSP problem.\n";
+   "solve(x): Solve a TSP problem.\n";
 
 static PyMethodDef funcs[] = {
    {"solve", (PyCFunction)elk_solve, 
