@@ -1,9 +1,33 @@
 #include <Python.h>
 #include "LKH.h"
 #include "Genetic.h"
+#include "math.h"
 #include "Heap.h"
 
-static void Read_EDGE_WEIGHT_SECTION();
+static void LoadWeightMatrix(int *_wArr);
+void ParseTour(int *outN, int *outBuff, int *Tour)
+{
+    int i, j, n, Forwards;
+    int bufIdx = 0;
+    char *FullFileName;
+    time_t Now;
+
+    n = ProblemType != ATSP ? Dimension : Dimension / 2;
+
+    for (i = 1; i < n && Tour[i] != 1; i++);
+    Forwards = ProblemType == ATSP ||
+        Tour[i < n ? i + 1 : 1] < Tour[i > 1 ? i - 1 : Dimension];
+    for (j = 1; j <= n; j++) {
+        outBuff[bufIdx] = Tour[i] - 1;
+        bufIdx++;
+        if (Forwards) {
+            if (++i > n)
+                i = 1;
+        } else if (--i < 1)
+            i = n;
+    }
+    *outN = bufIdx;
+}
 static void CreateNodes()
 {
 	Node *Prev = 0, *N = 0;
@@ -188,12 +212,12 @@ void ReadParameters()
     LastLine = 0;
 
 	// Go here
-	Runs = 1;
+	Runs = 5;
 	Precision = 50;
 	TourFileName = "aaa2.txt";
 }
 
-void ReadProblem()
+void ReadProblem(int *myMatrix, int matrixLen)
 {
     int i, K;
     char *Line, *Keyword;
@@ -211,12 +235,12 @@ void ReadProblem()
 
 	// Go here
 	ProblemType = ATSP;
-	Dimension = 3;
+	Dimension = (int) sqrt(matrixLen);
     DimensionSaved = Dimension;
 	WeightType = EXPLICIT;
 	Distance = Distance_EXPLICIT;
 	WeightFormat = FULL_MATRIX;
-	Read_EDGE_WEIGHT_SECTION();
+    LoadWeightMatrix(myMatrix);
 
     Swaps = 0;
 
@@ -321,8 +345,6 @@ void ReadProblem()
     if (ProblemType == HCP || ProblemType == HPP)
         MaxCandidates = 0;
     if (TraceLevel >= 1) {
-        printff("done\n");
-        PrintParameters();
     }
     if (InitialTourFileName)
 		printf("initial tour name\n");
@@ -336,9 +358,8 @@ void ReadProblem()
     LastLine = 0;
 }
 
-static void Read_EDGE_WEIGHT_SECTION()
+static void LoadWeightMatrix(int *_wArr)
 {
-	int _wArr[9] = {0, 5, 5, 5, 0, 6, 5, 5, 0};
 	int _wArrIndex = 0;
     Node *Ni, *Nj;
     int i, j, n, W;
@@ -399,32 +420,158 @@ static void Read_EDGE_WEIGHT_SECTION()
     if (ProblemType == HPP)
         Dimension++;
 }
-int m_calculate()
+int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
 {
+    GainType Cost, OldOptimum;
+    double Time, LastTime = GetTime();
 	ReadParameters();
 	MaxMatrixDimension = 20000;
 	MergeWithTour = Recombination == IPT ? MergeWithTourIPT :
 		MergeWithTourGPX2;
-	ReadProblem();
+	ReadProblem(matrixBuff, matrixLen);
 
 	AllocateStructures();
-	TraceLevel = 10000;
+	TraceLevel = 1000;
 	CandidateFiles = 0;
 	PiFileName = 0;
 	EdgeFiles = 0;
 	CreateCandidateSet();
 	InitializeStatistics();
-	printf("norm = %d\n", Norm);
+
+    if(Norm == 0) {
+        Optimum = BestCost = (GainType) LowerBound;
+        UpdateStatistics(Optimum, GetTime() - LastTime);
+        RecordBetterTour();
+        RecordBestTour();
+        ParseTour(tourN, tourBuff, BestTour);
+        return 0;
+    } else {
+        BestCost = PLUS_INFINITY;
+    }
+
+    for (Run = 1; Run <= Runs; Run++) {
+        LastTime = GetTime();
+        Cost = FindTour();      /* using the Lin-Kernighan heuristic */
+        if (MaxPopulationSize > 1) {
+            /* Genetic algorithm */
+            int i;
+            for (i = 0; i < PopulationSize; i++) {
+                GainType OldCost = Cost;
+                Cost = MergeTourWithIndividual(i);
+                if (TraceLevel >= 1 && Cost < OldCost) {
+                    printff("  Merged with %d: Cost = " GainFormat, i + 1,
+                            Cost);
+                    if (Optimum != MINUS_INFINITY && Optimum != 0)
+                        printff(", Gap = %0.4f%%",
+                                100.0 * (Cost - Optimum) / Optimum);
+                    printff("\n");
+                }
+            }
+            if (!HasFitness(Cost)) {
+                if (PopulationSize < MaxPopulationSize) {
+                    AddToPopulation(Cost);
+                    if (TraceLevel >= 1)
+                        PrintPopulation();
+                } else if (Cost < Fitness[PopulationSize - 1]) {
+                    i = ReplacementIndividual(Cost);
+                    ReplaceIndividualWithTour(i, Cost);
+                    if (TraceLevel >= 1)
+                        PrintPopulation();
+                }
+            }
+        } else if (Run > 1)
+            Cost = MergeTourWithBestTour();
+        if (Cost < BestCost) {
+            BestCost = Cost;
+            RecordBetterTour();
+            RecordBestTour();
+            /*
+            WriteTour(OutputTourFileName, BestTour, BestCost);
+            WriteTour(TourFileName, BestTour, BestCost);
+            */
+        }
+        OldOptimum = Optimum;
+        if (Cost < Optimum) {
+            if (FirstNode->InputSuc) {
+                Node *N = FirstNode;
+                while ((N = N->InputSuc = N->Suc) != FirstNode);
+            }
+            Optimum = Cost;
+            printff("*** New optimum = " GainFormat " ***\n\n", Optimum);
+        }
+        Time = fabs(GetTime() - LastTime);
+        UpdateStatistics(Cost, Time);
+        if (TraceLevel >= 1 && Cost != PLUS_INFINITY) {
+            printff("Run %d: Cost = " GainFormat, Run, Cost);
+            if (Optimum != MINUS_INFINITY && Optimum != 0)
+                printff(", Gap = %0.4f%%",
+                        100.0 * (Cost - Optimum) / Optimum);
+            printff(", Time = %0.2f sec. %s\n\n", Time,
+                    Cost < Optimum ? "<" : Cost == Optimum ? "=" : "");
+        }
+        if (StopAtOptimum && Cost == OldOptimum && MaxPopulationSize >= 1) {
+            Runs = Run;
+            break;
+        }
+        if (PopulationSize >= 2 &&
+            (PopulationSize == MaxPopulationSize ||
+             Run >= 2 * MaxPopulationSize) && Run < Runs) {
+            Node *N;
+            int Parent1, Parent2;
+            Parent1 = LinearSelection(PopulationSize, 1.25);
+            do
+                Parent2 = LinearSelection(PopulationSize, 1.25);
+            while (Parent2 == Parent1);
+            ApplyCrossover(Parent1, Parent2);
+            N = FirstNode;
+            do {
+                if (ProblemType != HCP && ProblemType != HPP) {
+                    int d = C(N, N->Suc);
+                    AddCandidate(N, N->Suc, d, INT_MAX);
+                    AddCandidate(N->Suc, N, d, INT_MAX);
+                }
+                N = N->InitialSuc = N->Suc;
+            }
+            while (N != FirstNode);
+        }
+        SRandom(++Seed);
+    }
+   ParseTour(tourN, tourBuff, BestTour);
    return Norm;
 
 }
 
-static PyObject* elk_solve(PyObject* self)
+static PyObject* elk_solve(PyObject* self, PyObject *arg)
 {
-   int norm_result = m_calculate();
-   char out_buff[1000];
-   sprintf(out_buff, "The norm is: %d", norm_result);
-   return Py_BuildValue("s", out_buff);
+    int pyLen = PyObject_Length(arg);
+    int pyLenSqrt = (int) sqrt(pyLen);
+    if(pyLen < 4 || pyLenSqrt * pyLenSqrt != pyLen) {
+        PyErr_SetString(PyExc_ValueError, "Argument should be a list with N^2 >= 4 elements.\n"\
+        "Example: [1, 1, 1, 1].");
+        return 0;
+    }
+    int *matrixBuff = (int*) malloc(sizeof(int) * pyLen);
+    int *tourBuff = (int*) malloc(sizeof(int) * pyLenSqrt);
+    int tourN = 0;
+
+    for(long i = 0; i < pyLen; i++) {
+        PyObject *pyNumber = PyObject_GetItem(arg, PyLong_FromLong(i));
+        long long justNumber = PyLong_AsLongLong(pyNumber);
+        int justNumber_i = (int) justNumber;
+        // TODO: don't lose precision
+        matrixBuff[i] = justNumber_i;
+    }
+   int norm_result = m_calculate(matrixBuff, pyLen, tourBuff, &tourN);
+   free(matrixBuff);
+   PyObject *list = PyList_New(tourN);
+   for(int i = 0; i < tourN; i++) {
+       PyObject *tourElement = PyLong_FromLong((long)tourBuff[i]);
+       PyList_SetItem(list, i, tourElement);
+   }
+
+    free(tourBuff);
+   printf("norm = %d\n", norm_result);
+   return list;
 }
 
 static char elk_docs[] =
@@ -432,7 +579,7 @@ static char elk_docs[] =
 
 static PyMethodDef funcs[] = {
    {"solve", (PyCFunction)elk_solve, 
-   METH_NOARGS, elk_docs},
+   METH_O, elk_docs},
    {NULL}
 };
 
