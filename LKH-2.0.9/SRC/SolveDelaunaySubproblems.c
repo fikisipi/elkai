@@ -55,9 +55,6 @@ void SolveDelaunaySubproblems()
     if (Optimum != MINUS_INFINITY && Optimum != 0)
         printff(", Gap = %0.4f%%",
                 100.0 * (GlobalBestCost - Optimum) / Optimum);
-    printff(", Time = %0.2f sec. %s\n", fabs(GetTime() - EntryTime),
-            GlobalBestCost < Optimum ? "<" : GlobalBestCost ==
-            Optimum ? "=" : "");
     if (SubproblemBorders && Subproblems > 1)
         SolveSubproblemBorderProblems(Subproblems, &GlobalBestCost);
 }

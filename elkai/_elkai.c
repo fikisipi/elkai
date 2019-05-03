@@ -414,7 +414,7 @@ int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
     _elk_ReadProblem(matrixBuff, matrixLen);
 
     AllocateStructures();
-    TraceLevel = 1000;
+    TraceLevel = -1;
     CandidateFiles = 0;
     PiFileName = 0;
     EdgeFiles = 0;
