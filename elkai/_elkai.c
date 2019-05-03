@@ -566,7 +566,6 @@ static PyObject *elk_solve(PyObject *self, PyObject *arg)
     int norm_result = m_calculate(matrixBuff, pyLen, tourBuff, &tourN);
     free(matrixBuff);
     PyObject *list = PyList_New(tourN);
-    int i;
     for (i = 0; i < tourN; i++)
     {
         PyObject *tourElement = PyLong_FromLong((long)tourBuff[i]);
