@@ -4,6 +4,9 @@ set -e -x
 # Install a system package required by our library
 yum install -y atlas-devel
 
+/opt/python/cp36*/bin/pip install cmake
+ln -s /opt/python/cp36*/bin/cmake /usr/sbin/cmake
+
 # Compile wheels
 for PYBIN in /opt/python/cp3*/bin; do
     "${PYBIN}/pip" install -r /io/dev-requirements.txt
