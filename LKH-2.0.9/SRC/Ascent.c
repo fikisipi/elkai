@@ -24,6 +24,7 @@ GainType Ascent()
     Node *t;
     GainType BestW, W, W0, Alpha, MaxAlpha;
     int T, Period, P, InitialPhase, BestNorm;
+        printff("Creating ascent inside...\n");
 
   Start:
     /* Initialize Pi and BestPi */
@@ -41,6 +42,7 @@ GainType Ascent()
             AddExtraCandidates(ExtraCandidates, ExtraCandidateSetType,
                                ExtraCandidateSetSymmetric);
     }
+    printff("tree cost...\n");
 
     /* Compute the cost of a minimum 1-tree */
     W = Minimum1TreeCost(CandidateSetType == DELAUNAY ||
@@ -53,10 +55,12 @@ GainType Ascent()
        (2) the norm of the tree (its deviation from a tour) is zero
        (in that case the true optimum has been found).
      */
+     printf("%d %d\n", Subgradient, Norm);
     if (!Subgradient || !Norm)
         return W;
 
     if (MaxCandidates > 0) {
+        printf("max cand > 0\n");
         /* Generate symmetric candididate sets for all nodes */
         MaxAlpha = INT_MAX;
         if (Optimum != MINUS_INFINITY
@@ -71,6 +75,7 @@ GainType Ascent()
                 return W;
         }
     }
+    printf("after maxcand\n");
     if (ExtraCandidates > 0)
         AddExtraCandidates(ExtraCandidates, ExtraCandidateSetType,
                            ExtraCandidateSetSymmetric);

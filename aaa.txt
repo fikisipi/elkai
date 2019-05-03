@@ -1,0 +1,11 @@
+NAME : ca4663.15.tour
+COMMENT : Length = 15
+COMMENT : Found by LKH [Keld Helsgaun] Fri May  3 17:34:23 2019
+TYPE : TOUR
+DIMENSION : 3
+TOUR_SECTION
+1
+3
+2
+-1
+EOF
