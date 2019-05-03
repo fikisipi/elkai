@@ -381,6 +381,11 @@ static void LoadWeightMatrix(int *_wArr)
         Dimension++;
 }
 
+// These functions reset the global state that LKH uses.
+// It makes it possible to re-run the solver without
+// restarting the program.
+// I'm sorry.
+
 void _Reset1();
 void _Reset2();
 void _Reset3();
