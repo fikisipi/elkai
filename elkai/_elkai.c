@@ -315,7 +315,6 @@ static void LoadWeightMatrix(int *_wArr)
     Node *Ni, *Nj;
     int i, j, n, W;
 
-    if (!FirstNode)
         CreateNodes();
     if (ProblemType != ATSP)
     {
