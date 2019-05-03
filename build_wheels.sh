@@ -4,16 +4,19 @@ set -e -x
 # Install a system package required by our library
 yum install -y atlas-devel
 
-/opt/python/cp36*/bin/pip install cmake
-ln -s /opt/python/cp36*/bin/cmake /usr/sbin/cmake
-
+MPATH="$PATH"
 # Compile wheels
 for PYBIN in /opt/python/cp3*/bin; do
+    PATH="${PYBIN}/:${MPATH}"
     "${PYBIN}/pip" install -r /io/dev-requirements.txt
     "${PYBIN}/pip" wheel /io/ -w wheelhouse/
+    /bin/rm -rf /io/dist
+    /bin/rm -rf /io/_skbuild
+    /bin/rm -rf /io/CMakeFiles || true
 done
 
 # Bundle external shared libraries into the wheels
+PLAT="manylinux1_x86_64"
 for whl in wheelhouse/*.whl; do
     auditwheel repair "$whl" --plat $PLAT -w /io/wheelhouse/
 done
