@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.11.0)
 project(elkai)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(PythonExtensions REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR}/LKH-2.0.9/SRC/INCLUDE)
