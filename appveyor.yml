@@ -1,19 +1,19 @@
 environment:
   matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
     - PYTHON: "C:\\Python35"
     - PYTHON: "C:\\Python36"
     - PYTHON: "C:\\Python37"
     - PYTHON: "C:\\Python35-x64"
     - PYTHON: "C:\\Python36-x64"
     - PYTHON: "C:\\Python37-x64"
-    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
 
 install:
   # We need wheel installed to build wheels
   - cmd: set PATH=%PYTHON%;%PATH%
   - cmd: "%PYTHON%\\python.exe -m pip install wheel"
   - cmd: "%PYTHON%\\python.exe -m pip install -r dev-requirements.txt"
-  - sh: docker run --rm -it -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 source /io/build_wheels.sh
+  - sh: docker run --rm -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 source /io/build_wheels.sh
 
 build: off
 
