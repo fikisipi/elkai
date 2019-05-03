@@ -315,7 +315,7 @@ static void LoadWeightMatrix(int *_wArr)
     Node *Ni, *Nj;
     int i, j, n, W;
 
-        CreateNodes();
+    CreateNodes();
     if (ProblemType != ATSP)
     {
         assert(CostMatrix =
