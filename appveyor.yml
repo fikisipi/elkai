@@ -1,3 +1,6 @@
+skip_commits:
+  message: /ci skip/
+
 environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
@@ -23,8 +26,6 @@ artifacts:
   # bdist_wheel puts your built wheel in the dist directory
   - path: dist\*
 
-only_commits:
-  message: /build/
 #on_success:
 #  You can use this step to upload your artifacts to a public website.
 #  See Appveyor's documentation for more details. Or you can simply
