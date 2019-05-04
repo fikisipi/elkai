@@ -6,6 +6,9 @@
 
 // TODO:
 // - Delete obsolete problem types
+// - LKH feature: Allow coordinate based input instead of distances?
+// - LKH feature: Add a known optimal cost input variable?
+// - LKH feature: Add known optimal subtours?
 // - Make sure camel case is used everywhere
 // - Use git submodule instead of a LKH copy
 
@@ -166,7 +169,7 @@ void _elk_ReadProblem(int *myMatrix, int matrixLen)
     int i, K;
     char *Line, *Keyword;
 
-    // FreeStructures();
+    FreeStructures();
     FirstNode = 0;
     WeightType = WeightFormat = ProblemType = -1;
     CoordType = NO_COORDS;
@@ -177,7 +180,9 @@ void _elk_ReadProblem(int *myMatrix, int matrixLen)
     C = 0;
     c = 0;
 
-    // Go here
+    // At the moment, this is hardcoded.
+    // Future elkai may allow different problem types, or
+    // different weight formats.
     ProblemType = ATSP;
     Dimension = (int)sqrt(matrixLen);
     DimensionSaved = Dimension;
@@ -395,6 +400,8 @@ void _Reset6();
 void _Reset7();
 void _Reset8();
 
+// m_calculate reads the matrix buffer and outputs it into tourBuff and updates
+// tourN which is the tour length.
 int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
 {
     _Reset1();
@@ -435,6 +442,8 @@ int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
         BestCost = PLUS_INFINITY;
     }
 
+    // This loop generates and merges tours, copied from LKH.
+    // TODO: Remove printff() statements? and possibly remove printff.c
     for (Run = 1; Run <= Runs; Run++)
     {
         LastTime = GetTime();
@@ -546,7 +555,7 @@ static PyObject *elk_solve(PyObject *self, PyObject *arg)
     int pyLenSqrt = (int)sqrt(pyLen);
     if (pyLen < 4 || pyLenSqrt * pyLenSqrt != pyLen)
     {
-        PyErr_SetString(PyExc_ValueError, "Argument should be a list with N^2 >= 4 elements.\n"
+        PyErr_SetString(PyExc_TypeError, "Argument must be a list of integers with N^2 >= 4 elements.\n"
                                           "Example: [1, 1, 1, 1].");
         return 0;
     }
@@ -559,6 +568,10 @@ static PyObject *elk_solve(PyObject *self, PyObject *arg)
     {
         PyObject *pyNumber = PyObject_GetItem(arg, PyLong_FromLong(i));
         long long justNumber = PyLong_AsLongLong(pyNumber);
+        if(PyErr_Occurred() != 0) {
+            PyErr_SetString(PyExc_TypeError, "List must only contain integers.");
+            return 0;
+        }
         int justNumber_i = (int)justNumber;
         // TODO: don't lose precision
         matrixBuff[i] = justNumber_i;

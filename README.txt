@@ -18,24 +18,43 @@ python setup.py install
 
 ```
 import elkai
-elkai.solve([
-    1, 1,
-    1, 1
+elkai.solve_int_matrix([
+    [1, 1],
+    [1, 1]
 ]) # Output: [0, 1]
 ```
 
-elkai.solve(x) solves an instance of the asymmetric TSP problem.
+== Docs ==
+
+Functions in the module:
+   elkai.solve_int_matrix(x)
+   elkai.solve_float_matrix(x)
+
+elkai.solve_int_matrix(x) solves an instance of the asymmetric TSP problem.
 
 Argument x:
-   A 1D array representing a integer distance matrix between
-   cities. For problems with N cities, len(x) must be N^2.
-   An example for N=3:
+   N*N matrix representing an integer distance matrix between
+   cities. An example for N=3:
    [
-       0, 4, 9,    # dist(c1, c1), dist(c1, c2), dist(c1, c3)
-       4, 0, 10,   # dist(c2, c1), dist(c2, c2), dist(c2, c3)
-       2, 4, 0     # dist(c3, c1), dist(c3, c2), dist(c3, c3)
+       [0, 4,  9],    # dist(c1, c1), dist(c1, c2), dist(c1, c3)
+       [4, 0, 10],    # dist(c2, c1), dist(c2, c2), dist(c2, c3)
+       [2, 4,  0]     # dist(c3, c1), dist(c3, c2), dist(c3, c3)
    ]
 
 Return value:
-  The tour, represented as a list of indices. The indices are
-  zero-indexed and based on the distance matrix order.
+   The tour, represented as a list of indices. The indices are
+   zero-indexed and based on the distance matrix order.
+
+
+
+elkai.solve_float_matrix(x) is exactly the same as the int version above,
+but it allows real numbers as distances. It reduces the float problem into
+an integer one and inaccuraries may happen. 
+
+Argument x:
+  N*N matrix representing a float distance matrix between
+  cities.
+
+Return value:
+   The tour, represented as a list of indices. The indices are
+   zero-indexed and based on the distance matrix order.
