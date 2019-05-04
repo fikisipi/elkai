@@ -1,4 +1,5 @@
 language: generic
+if: tag IS present
 
 matrix:
   include:
@@ -21,3 +22,4 @@ deploy:
   file: dist/*
   on:
     tags: true
+    all_branches: true
