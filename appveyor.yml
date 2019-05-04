@@ -11,8 +11,7 @@ environment:
 install:
   # We need wheel installed to build wheels
   - cmd: set PATH=%PYTHON%;%PATH%
-  - cmd: "%PYTHON%\\python.exe -m pip install wheel"
-  - cmd: "%PYTHON%\\python.exe -m pip install -r dev-requirements.txt"
+  - cmd: "%PYTHON%\\python.exe -m pip install wheel scikit-build ninja"
   - sh: docker run --rm -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 /bin/bash /io/build_wheels.sh
 
 build: off
