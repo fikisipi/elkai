@@ -16,7 +16,7 @@ Keld Helsgaun, PhD.
 How to use
 ----------
 
-```
+```python
 import elkai
 elkai.solve_int_matrix([
     [1, 1],
@@ -33,7 +33,7 @@ Functions in the `elkai` module:
 
 `solve_int_matrix` solves an instance of the asymmetric TSP problem with integer distances.
 
-```
+```js
 solve_int_matrix(x)
 
 x:
@@ -55,7 +55,7 @@ Return value:
 but it allows real numbers as distances.
 
 It reduces the float problem into an integer problem and inaccuraries may happen. 
-```
+```js
 solve_float_matrix(x)
 
 x:
