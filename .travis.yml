@@ -4,10 +4,16 @@ matrix:
   include:
     - os: osx
       before_install:
-        - pyenv install 3.5
-        - pyenv install 3.6
-        - pyenv install 3.7
-        - pyenv global 3.5
+        - pyenv install 3.5.5
+        - pyenv install 3.6.6
+        - pyenv install 3.7.1
+        - pyenv global 3.5.5
 
 install: python -m pip install wheel scikit-build ninja
 script: python setup.py bdist_wheel
+deploy:
+  provider: releases
+  api_key:
+    secure: "VHisrNGwvxsx0VJhXzdKV45IBmpY/EL/gv9X/87mxPurRNLffuO9f/8k4tFae8PQ4qm8+KjwGj+RW7rgUSwunB4y+U9MbFL0tbf3co9WBsVigJKGgKcjmL6ux7VDDHoQYT0fKvRlDjzocqEZiFH5a1w4kgmEcxQoGa1xHitCT7MhR8E1VJIvhBD5WYXAr6yTjhgfWvE9DqH/dKYKZIrnwmRoT8sjM4xki76B3MYS66H7AZBu8X0ycXV6XWJRcgMFdLbQvh5N3dREe25rk9GS+spQVP3Uvvje9t2fDdC34IojuBMbo7Yp+G8P5unC/aOWuOOQGIKx8WCQHclLIOKHDbZvq1PMnnRQG9mBFTD0+yEGR+utxMxwutnS2y4KmFt+1joTdwHIYyGSDrQNpezDYptqOkPR9EKoBqCHNbs7m0BaZKaQdKRblNPc6STRS4ooR6UljdVDrq29tWyg6JtGv6DyDGZekKOKcu2GnE3URIpgV/+AL5M6KOvSZU1108dxCgn0I+yb0YS8SnLlhmJobDsrQVJkSoMSoF199oSjbNXfp0SmkrnzmTzlqsEMUMbiQ+Y1AHn+3RjzKmrbkfEcPssuPOK5gxl8w/iFyHG3Z+cQaebSxi8sI0FIUvDRkdzzrxlfsASwNTw7Ikmc+Qkaj4J+ql1rcd+iHQE1vA4+/SQ="
+  skip_cleanup: True
+  file: dist/*
