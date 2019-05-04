@@ -13,7 +13,7 @@ install:
   - cmd: set PATH=%PYTHON%;%PATH%
   - cmd: "%PYTHON%\\python.exe -m pip install wheel"
   - cmd: "%PYTHON%\\python.exe -m pip install -r dev-requirements.txt"
-  - sh: docker run --rm -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 source /io/build_wheels.sh
+  - sh: docker run --rm -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 /bin/bash /io/build_wheels.sh
 
 build: off
 
@@ -24,6 +24,8 @@ artifacts:
   # bdist_wheel puts your built wheel in the dist directory
   - path: dist\*
 
+only_commits:
+  message: /build/
 #on_success:
 #  You can use this step to upload your artifacts to a public website.
 #  See Appveyor's documentation for more details. Or you can simply
