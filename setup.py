@@ -11,7 +11,7 @@ setup(
     description="A TSP solver for Python without any dependencies.",
     long_description=long_description,
     url="https://github.com/dimitrovskif/elkai",
-    version="0.0.1",
+    version="0.0.2",
     packages=['elkai'],
     author="Filip Dimitrovski",
     license="MIT",
