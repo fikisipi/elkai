@@ -1,0 +1,11 @@
+language: generic
+
+matrix:
+  include:
+    - os: osx
+      before_install:
+        - brew update
+        - brew outdated python || brew upgrade python
+
+install: python3 -m pip install wheel scikit-build ninja
+script: python3 setup.py bdist_wheel
