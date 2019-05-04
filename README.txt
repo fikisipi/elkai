@@ -58,3 +58,11 @@ Argument x:
 Return value:
    The tour, represented as a list of indices. The indices are
    zero-indexed and based on the distance matrix order.
+
+== Multithreading & leaks ==
+
+elkai doesn't not release the GIL during processing, so you can't
+solve multiple problems concurrently.
+
+We don't use Valgrind, but leaks are possible because the original
+C solver was written with one problem per executed process in mind. 

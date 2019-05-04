@@ -158,7 +158,7 @@ void ReadParameters()
     TraceLevel = 1;
     LastLine = 0;
 
-    // Go here
+    // Set up actual values
     Runs = 5;
     Precision = 50;
     TourFileName = "aaa2.txt";
