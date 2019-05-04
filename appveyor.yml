@@ -1,6 +1,4 @@
-skip_commits:
-  message: /ci skip/
-
+skip_non_tags: true
 environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu

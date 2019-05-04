@@ -5,8 +5,9 @@ elkai is a Python 3 TSP solver without external dependencies,
 based on [LKH](http://akira.ruc.dk/~keld/research/LKH/) by
 Keld Helsgaun, PhD.
 
-To install it run `pip install elkai`. Available on Windows, Linux, OS X
-for Python 3.5 and above as a binary wheel. 
+💾 **To install it** run `pip install elkai`.
+
+💻 **Supported platforms:** elkai is available on Windows, Linux, OS X for Python 3.5 and above as a binary wheel.
 
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ltwfnqjgxafdx3gv?svg=true)](https://ci.appveyor.com/project/dimitrovskif/elkai)
@@ -30,7 +31,7 @@ Functions in the `elkai` module:
    * `elkai.solve_int_matrix(x)`
    * `elkai.solve_float_matrix(x)`
 
-`solve_int_matrix` solves an instance of the asymmetric TSP problem.
+`solve_int_matrix` solves an instance of the asymmetric TSP problem with .
 
 ```
 solve_int_matrix(x)
@@ -58,7 +59,7 @@ solve_float_matrix(x)
 
 x:
   N*N matrix representing a float distance matrix between
-  cities. An example for N = 2
+  cities. An example for N=2:
   [
       [0.0, 1.0],     # dist(c1, c1), dist(c1, c2)
       [1.0, 0.0]      # dist(c2, c1), dist(c2, c2)
