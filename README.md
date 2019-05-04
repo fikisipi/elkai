@@ -31,7 +31,7 @@ Functions in the `elkai` module:
    * `elkai.solve_int_matrix(x)`
    * `elkai.solve_float_matrix(x)`
 
-`solve_int_matrix` solves an instance of the asymmetric TSP problem with .
+`solve_int_matrix` solves an instance of the asymmetric TSP problem with integer distances.
 
 ```
 solve_int_matrix(x)
@@ -51,9 +51,10 @@ Return value:
 ```
 
 
-`solve_float_matrix` is exactly the same as the int version above,
-but it allows real numbers as distances. It reduces the float problem into
-an integer one and inaccuraries may happen. 
+`solve_float_matrix` is exactly the same as the int version,
+but it allows real numbers as distances.
+
+It reduces the float problem into an integer problem and inaccuraries may happen. 
 ```
 solve_float_matrix(x)
 
