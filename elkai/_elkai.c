@@ -12,9 +12,9 @@
 // - Make sure camel case is used everywhere
 // - Use git submodule instead of a LKH copy
 
-static int elk_invoke_solver(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN);
+static int InvokeSolver(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN);
 
-static PyObject *elk_solve(PyObject *self, PyObject *args)
+static PyObject *ElkSolve(PyObject *self, PyObject *args)
 {
     // *args of a vararg Python function is a tuple
     // of unknown length.
@@ -62,7 +62,7 @@ static PyObject *elk_solve(PyObject *self, PyObject *args)
         // TODO: don't lose precision
         matrixBuff[i] = justNumber_i;
     }
-    int norm_result = elk_invoke_solver(matrixBuff, pyLen, runCount, tourBuff, &tourN);
+    int norm_result = InvokeSolver(matrixBuff, pyLen, runCount, tourBuff, &tourN);
     free(matrixBuff);
     PyObject *list = PyList_New(tourN);
     for (i = 0; i < tourN; i++)
@@ -79,11 +79,11 @@ static char elk_docs[] =
     "solve(x): Solve a TSP problem.\n";
 
 static PyMethodDef funcs[] = {
-    {"solve", (PyCFunction)elk_solve,
+    {"solve", (PyCFunction) ElkSolve,
      METH_VARARGS, elk_docs},
     {NULL}};
 
-static struct PyModuleDef hello_module_def = {
+static struct PyModuleDef elkDef = {
     PyModuleDef_HEAD_INIT,
     "_elkai",
     "",
@@ -92,10 +92,10 @@ static struct PyModuleDef hello_module_def = {
 
 PyMODINIT_FUNC PyInit__elkai(void)
 {
-    return PyModule_Create(&hello_module_def);
+    return PyModule_Create(&elkDef);
 }
 
-static void LoadWeightMatrix(int *_wArr);
+static void LoadWeightMatrix(int *arr);
 
 void ParseTour(int *outN, int *outBuff, int *Tour)
 {
@@ -481,9 +481,9 @@ void _Reset6();
 void _Reset7();
 void _Reset8();
 
-// elk_invoke_solver reads the matrix buffer and outputs it into tourBuff and updates
+// InvokeSolver reads the matrix buffer and outputs it into tourBuff and updates
 // tourN which is the tour length.
-static int elk_invoke_solver(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN)
+static int InvokeSolver(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN)
 {
     _Reset1();
     _Reset2();
