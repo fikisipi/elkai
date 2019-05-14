@@ -12,7 +12,7 @@
 // - Make sure camel case is used everywhere
 // - Use git submodule instead of a LKH copy
 
-static int m_calculate(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN);
+static int elk_invoke_solver(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN);
 
 static PyObject *elk_solve(PyObject *self, PyObject *args)
 {
@@ -62,7 +62,7 @@ static PyObject *elk_solve(PyObject *self, PyObject *args)
         // TODO: don't lose precision
         matrixBuff[i] = justNumber_i;
     }
-    int norm_result = m_calculate(matrixBuff, pyLen, runCount, tourBuff, &tourN);
+    int norm_result = elk_invoke_solver(matrixBuff, pyLen, runCount, tourBuff, &tourN);
     free(matrixBuff);
     PyObject *list = PyList_New(tourN);
     for (i = 0; i < tourN; i++)
@@ -74,6 +74,7 @@ static PyObject *elk_solve(PyObject *self, PyObject *args)
     free(tourBuff);
     return list;
 }
+
 static char elk_docs[] =
     "solve(x): Solve a TSP problem.\n";
 
@@ -95,6 +96,7 @@ PyMODINIT_FUNC PyInit__elkai(void)
 }
 
 static void LoadWeightMatrix(int *_wArr);
+
 void ParseTour(int *outN, int *outBuff, int *Tour)
 {
     int i, j, n, Forwards;
@@ -122,6 +124,7 @@ void ParseTour(int *outN, int *outBuff, int *Tour)
     }
     *outN = bufIdx;
 }
+
 static void CreateNodes()
 {
     Node *Prev = 0, *N = 0;
@@ -170,11 +173,8 @@ static int FixEdge(Node *Na, Node *Nb)
     return 1;
 }
 
-void ReadParameters(int runCount)
+static void SetParameters(int runCount)
 {
-    char *Line, *Keyword, *Token, *Name;
-    unsigned int i;
-
     ProblemFileName = PiFileName = InputTourFileName =
         OutputTourFileName = TourFileName = 0;
     CandidateFiles = MergeTourFiles = 0;
@@ -243,7 +243,7 @@ void ReadParameters(int runCount)
     // Set up actual values
     Runs = runCount;
     Precision = 50;
-    TourFileName = "aaa2.txt";
+    TourFileName = "";
 }
 
 void _elk_ReadProblem(int *myMatrix, int matrixLen)
@@ -265,6 +265,7 @@ void _elk_ReadProblem(int *myMatrix, int matrixLen)
     // At the moment, this is hardcoded.
     // Future elkai may allow different problem types, or
     // different weight formats.
+
     ProblemType = ATSP;
     Dimension = (int)sqrt(matrixLen);
     DimensionSaved = Dimension;
@@ -380,9 +381,7 @@ void _elk_ReadProblem(int *myMatrix, int matrixLen)
     }
     if (ProblemType == HCP || ProblemType == HPP)
         MaxCandidates = 0;
-    if (TraceLevel >= 1)
-    {
-    }
+    /* These printfs shouldn't happen, maybe delete them or assert. */
     if (InitialTourFileName)
         printf("initial tour name\n");
     if (InputTourFileName)
@@ -482,9 +481,9 @@ void _Reset6();
 void _Reset7();
 void _Reset8();
 
-// m_calculate reads the matrix buffer and outputs it into tourBuff and updates
+// elk_invoke_solver reads the matrix buffer and outputs it into tourBuff and updates
 // tourN which is the tour length.
-static int m_calculate(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN)
+static int elk_invoke_solver(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN)
 {
     _Reset1();
     _Reset2();
@@ -497,7 +496,7 @@ static int m_calculate(int *matrixBuff, int matrixLen, int runCount, int *tourBu
 
     GainType Cost, OldOptimum;
     double Time, LastTime = GetTime();
-    ReadParameters(runCount);
+    SetParameters(runCount);
     MaxMatrixDimension = 20000;
     MergeWithTour = Recombination == IPT ? MergeWithTourIPT : MergeWithTourGPX2;
     _elk_ReadProblem(matrixBuff, matrixLen);
