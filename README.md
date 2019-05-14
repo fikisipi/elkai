@@ -60,7 +60,11 @@ FAQ
 
 **What's the difference between LKH and elkai?**
 
-elkai is a library that contains the [LKH solver](http://akira.ruc.dk/~keld) and has some wrapper code to expose it to Python. The advantage is that you don't have to compile LKH yourself or download LKH executables and then manually parse the output. 
+elkai is a library that contains the [LKH solver](http://akira.ruc.dk/~keld) and has some wrapper code to expose it to Python. The advantage is that you don't have to compile LKH yourself or download LKH executables and then manually parse the output.
+
+**How to manually build the library?**
+
+You need CMake, a C compiler and Python 3.5+. You need to install the dev dependencies first: `pip install scikit-build ninja`. To build the library, run `python setup.py build` and `python setup.py install` to install it. To make a binary wheel, run `python setup.py bdist_wheel`.
 
 **How accurately does it solve TSP problems?**
 
