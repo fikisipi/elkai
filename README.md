@@ -5,7 +5,7 @@ elkai is a Python 3 TSP solver without external dependencies,
 based on [LKH](http://akira.ruc.dk/~keld/research/LKH/) by
 Keld Helsgaun, PhD.
 
-💾 **To install it** run `pip install elkai`.
+💾 **To install it** run `pip install elkai`
 
 💻 **Supported platforms:** elkai is available on Windows, Linux, OS X for Python 3.5 and above as a binary wheel.
 
