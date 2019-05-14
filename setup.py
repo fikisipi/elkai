@@ -12,7 +12,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url="https://github.com/dimitrovskif/elkai",
-    version="0.0.3",
+    version="0.0.4",
     packages=['elkai'],
     author="Filip Dimitrovski",
     license="MIT",
