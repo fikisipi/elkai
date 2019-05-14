@@ -8,7 +8,6 @@ MPATH="$PATH"
 # Compile wheels
 for PYBIN in /opt/python/cp3*/bin; do
     PATH="${PYBIN}/:${MPATH}"
-    "${PYBIN}/pip" install --upgrade setuptools wheel
     "${PYBIN}/pip" install -r /io/dev-requirements.txt
     "${PYBIN}/pip" wheel /io/ -w dist/
     /bin/rm -rf /io/_skbuild

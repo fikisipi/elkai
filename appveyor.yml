@@ -12,7 +12,6 @@ environment:
 install:
   # We need wheel installed to build wheels
   - cmd: set PATH=%PYTHON%;%PATH%
-  - cmd: "%PYTHON%\\python.exe -m pip install --upgrade setuptools wheel"
   - cmd: "%PYTHON%\\python.exe -m pip install wheel scikit-build ninja"
 
 build: off

@@ -13,15 +13,12 @@ matrix:
         - pyenv global 3.5.5
 script:
   - pyenv global 3.5.5
-  - python -m pip install --upgrade setuptools wheel
   - python -m pip install scikit-build ninja
   - python setup.py bdist_wheel
   - pyenv global 3.6.5
-  - python -m pip install --upgrade setuptools wheel
   - python -m pip install scikit-build ninja
   - python setup.py bdist_wheel
   - pyenv global 3.7.0b3
-  - python -m pip install --upgrade setuptools wheel
   - python -m pip install scikit-build ninja
   - python setup.py bdist_wheel
 deploy:
