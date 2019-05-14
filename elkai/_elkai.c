@@ -12,6 +12,88 @@
 // - Make sure camel case is used everywhere
 // - Use git submodule instead of a LKH copy
 
+static int m_calculate(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN);
+
+static PyObject *elk_solve(PyObject *self, PyObject *args)
+{
+    // *args of a vararg Python function is a tuple
+    // of unknown length.
+
+    if(PyObject_Length(args) != 2) {
+        PyErr_SetString(PyExc_TypeError, "Expected two arguments");
+        return 0;
+    }
+
+    PyObject *arg = PyObject_GetItem(args, PyLong_FromLong(0));
+    PyObject *runArg = PyObject_GetItem(args, PyLong_FromLong(1));
+
+    long runCount = PyLong_AsLong(runArg);
+    if(PyErr_Occurred() != 0 || runCount <= 0) {
+        PyErr_SetString(PyExc_TypeError, "Second argument must be a positive int");
+        return 0;
+    } 
+
+    int pyLen = PyObject_Length(arg);
+
+    // We get the problem dimension as a square root of the flat NxN
+    // matrix length. It could be done using recursive bit shifts too.
+
+    int pyLenSqrt = (int)sqrt(pyLen);
+    if (pyLen < 4 || pyLenSqrt * pyLenSqrt != pyLen)
+    {
+        PyErr_SetString(PyExc_TypeError, "Argument must be a list of integers with N^2 >= 4 elements.\n"
+                                          "Example: [1, 1, 1, 1].");
+        return 0;
+    }
+    int *matrixBuff = (int *)malloc(sizeof(int) * pyLen);
+    int *tourBuff = (int *)malloc(sizeof(int) * pyLenSqrt);
+    int tourN = 0;
+
+    long i;
+    for (i = 0; i < pyLen; i++)
+    {
+        PyObject *pyNumber = PyObject_GetItem(arg, PyLong_FromLong(i));
+        long justNumber = PyLong_AsLong(pyNumber);
+        if(PyErr_Occurred() != 0) {
+            PyErr_SetString(PyExc_TypeError, "List must only contain integers");
+            return 0;
+        }
+        int justNumber_i = (int)justNumber;
+        // TODO: don't lose precision
+        matrixBuff[i] = justNumber_i;
+    }
+    int norm_result = m_calculate(matrixBuff, pyLen, runCount, tourBuff, &tourN);
+    free(matrixBuff);
+    PyObject *list = PyList_New(tourN);
+    for (i = 0; i < tourN; i++)
+    {
+        PyObject *tourElement = PyLong_FromLong((long)tourBuff[i]);
+        PyList_SetItem(list, i, tourElement);
+    }
+
+    free(tourBuff);
+    return list;
+}
+static char elk_docs[] =
+    "solve(x): Solve a TSP problem.\n";
+
+static PyMethodDef funcs[] = {
+    {"solve", (PyCFunction)elk_solve,
+     METH_VARARGS, elk_docs},
+    {NULL}};
+
+static struct PyModuleDef hello_module_def = {
+    PyModuleDef_HEAD_INIT,
+    "_elkai",
+    "",
+    -1,
+    funcs};
+
+PyMODINIT_FUNC PyInit__elkai(void)
+{
+    return PyModule_Create(&hello_module_def);
+}
+
 static void LoadWeightMatrix(int *_wArr);
 void ParseTour(int *outN, int *outBuff, int *Tour)
 {
@@ -88,7 +170,7 @@ static int FixEdge(Node *Na, Node *Nb)
     return 1;
 }
 
-void ReadParameters()
+void ReadParameters(int runCount)
 {
     char *Line, *Keyword, *Token, *Name;
     unsigned int i;
@@ -159,7 +241,7 @@ void ReadParameters()
     LastLine = 0;
 
     // Set up actual values
-    Runs = 5;
+    Runs = runCount;
     Precision = 50;
     TourFileName = "aaa2.txt";
 }
@@ -402,7 +484,7 @@ void _Reset8();
 
 // m_calculate reads the matrix buffer and outputs it into tourBuff and updates
 // tourN which is the tour length.
-int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
+static int m_calculate(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN)
 {
     _Reset1();
     _Reset2();
@@ -415,7 +497,7 @@ int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
 
     GainType Cost, OldOptimum;
     double Time, LastTime = GetTime();
-    ReadParameters();
+    ReadParameters(runCount);
     MaxMatrixDimension = 20000;
     MergeWithTour = Recombination == IPT ? MergeWithTourIPT : MergeWithTourGPX2;
     _elk_ReadProblem(matrixBuff, matrixLen);
@@ -547,64 +629,4 @@ int m_calculate(int *matrixBuff, int matrixLen, int *tourBuff, int *tourN)
     }
     ParseTour(tourN, tourBuff, BestTour);
     return Norm;
-}
-
-static PyObject *elk_solve(PyObject *self, PyObject *arg)
-{
-    int pyLen = PyObject_Length(arg);
-    int pyLenSqrt = (int)sqrt(pyLen);
-    if (pyLen < 4 || pyLenSqrt * pyLenSqrt != pyLen)
-    {
-        PyErr_SetString(PyExc_TypeError, "Argument must be a list of integers with N^2 >= 4 elements.\n"
-                                          "Example: [1, 1, 1, 1].");
-        return 0;
-    }
-    int *matrixBuff = (int *)malloc(sizeof(int) * pyLen);
-    int *tourBuff = (int *)malloc(sizeof(int) * pyLenSqrt);
-    int tourN = 0;
-
-    long i;
-    for (i = 0; i < pyLen; i++)
-    {
-        PyObject *pyNumber = PyObject_GetItem(arg, PyLong_FromLong(i));
-        long long justNumber = PyLong_AsLongLong(pyNumber);
-        if(PyErr_Occurred() != 0) {
-            PyErr_SetString(PyExc_TypeError, "List must only contain integers.");
-            return 0;
-        }
-        int justNumber_i = (int)justNumber;
-        // TODO: don't lose precision
-        matrixBuff[i] = justNumber_i;
-    }
-    int norm_result = m_calculate(matrixBuff, pyLen, tourBuff, &tourN);
-    free(matrixBuff);
-    PyObject *list = PyList_New(tourN);
-    for (i = 0; i < tourN; i++)
-    {
-        PyObject *tourElement = PyLong_FromLong((long)tourBuff[i]);
-        PyList_SetItem(list, i, tourElement);
-    }
-
-    free(tourBuff);
-    return list;
-}
-
-static char elk_docs[] =
-    "solve(x): Solve a TSP problem.\n";
-
-static PyMethodDef funcs[] = {
-    {"solve", (PyCFunction)elk_solve,
-     METH_O, elk_docs},
-    {NULL}};
-
-static struct PyModuleDef hello_module_def = {
-    PyModuleDef_HEAD_INIT,
-    "_elkai",
-    "",
-    -1,
-    funcs};
-
-PyMODINIT_FUNC PyInit__elkai(void)
-{
-    return PyModule_Create(&hello_module_def);
 }

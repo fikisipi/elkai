@@ -4,7 +4,7 @@ import struct
 
 def float_to_int(x):
     """Converts a float into some unknown integer such that
-    the order is preserved: x <= y <=> f(x) <= f(y)."""
+    the order is preserved: x <= y <=> f(x) <= f(y)"""
     x_sign = int(x < 0)
 
     int_repr = struct.unpack("<i", struct.pack("<f", abs(x / 100)))[0]
@@ -17,24 +17,24 @@ def flatten_matrix(mat):
     MAXINT = 2147483647
     N = len(mat)
     if N < 2:
-        raise TypeError("Argument must be a N*N matrix with N > 1.")
+        raise TypeError("Argument must be a N*N matrix with N > 1")
     flattened = []
     for row in mat:
         if len(row) != N:
-            raise TypeError("Argument must be a N*N matrix!")
+            raise TypeError("Argument must be a N*N matrix")
         for column in row:
             int_col = int(column)
             if int_col > MAXINT:
-                raise TypeError("Distance must be < 2^31. Try the float version.")
+                raise TypeError("Distance must be < 2^31. Try the float version")
             flattened.append(int(column))
     return flattened
 
 
-def solve_int_matrix(mat):
-    flat_mat = flatten_matrix(mat)
-    return solve(flat_mat)
+def solve_int_matrix(matrix, runs=10):
+    flat_mat = flatten_matrix(matrix)
+    return solve(flat_mat, runs)
 
 
-def solve_float_matrix(mat):
-    flat_mat = [float_to_int(float(x)) for x in flatten_matrix(mat)]
-    return solve(flat_mat)
+def solve_float_matrix(matrix, runs=10):
+    flat_mat = [float_to_int(float(x)) for x in flatten_matrix(matrix)]
+    return solve(flat_mat, runs)

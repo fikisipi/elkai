@@ -13,7 +13,7 @@ Keld Helsgaun, PhD.
 [![Build status](https://ci.appveyor.com/api/projects/status/ltwfnqjgxafdx3gv?svg=true)](https://ci.appveyor.com/project/dimitrovskif/elkai)
 [![image](https://img.shields.io/pypi/v/elkai.svg)](https://pypi.org/project/elkai/)
 
-How to use
+Example usage 
 ----------
 
 ```python
@@ -27,51 +27,32 @@ elkai.solve_int_matrix([
 Documentation
 -------------
 
-Functions in the `elkai` module:
-   * `elkai.solve_int_matrix(x)`
-   * `elkai.solve_float_matrix(x)`
 
-`solve_int_matrix` solves an instance of the asymmetric TSP problem with integer distances.
+`solve_int_matrix(matrix, runs=10)` solves an instance of the asymmetric TSP problem with integer distances.
 
-```js
-solve_int_matrix(x)
-
-x:
+* `matrix`:
    N*N matrix representing an integer distance matrix between
-   cities. An example for N=3:
-   [
-       [0, 4,  9],    # dist(c1, c1), dist(c1, c2), dist(c1, c3)
-       [4, 0, 10],    # dist(c2, c1), dist(c2, c2), dist(c2, c3)
-       [2, 4,  0]     # dist(c3, c1), dist(c3, c2), dist(c3, c3)
+   cities. An example of N=3 city arrangement:
+   ```python
+   [                  # cities are zero indexed, d() is distance
+       [0, 4,  9],    # d(0, 0), d(0, 1), d(0, 2)
+       [4, 0, 10],    # d(1, 0), d(1, 1), ... and so on
+       [2, 4,  0] 
    ]
+   ```
 
-Return value:
-   The tour, represented as a list of indices. The indices are
+* `runs`:
+  An integer representing how many iterations the solver should
+  perform. By default, 10.
+
+* *Return value*: The tour, represented as a list of indices. The indices are
    zero-indexed and based on the distance matrix order.
-```
 
 
-`solve_float_matrix` is exactly the same as the int version,
-but it allows real numbers as distances.
 
-It reduces the float problem into an integer problem and inaccuraries may happen. 
-```js
-solve_float_matrix(x)
 
-x:
-  N*N matrix representing a float distance matrix between
-  cities. An example for N=2:
-  [
-      [0.0, 1.0],     # dist(c1, c1), dist(c1, c2)
-      [1.0, 0.0]      # dist(c2, c1), dist(c2, c2)
-  ]
-
-Return value:
-   The tour, represented as a list of indices. The indices are
-   zero-indexed and based on the distance matrix order. Example:
-   
-   [0, 2, 1] # the path is: "first city => third city => second city"
-```
+`solve_float_matrix(matrix, runs=10)` has the same signature as the previous, but allows floating point distances.
+It may be inaccurate.
 
 Multithreading & leaks
 ----------------------
