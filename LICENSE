@@ -1,4 +1,12 @@
-elkai is available for research and
-non profit use. It is based on LKH
-by Keld Helsgaun, who owns the
-rights to the solver.
+elkai is solely available for research and
+non-commercial (re)use.
+
+elkai contains the LKH project by
+Keld Helsgaun, who distributes the
+project by the same restrictions.
+
+elkai contains CPython code which
+is free open source software.
+
+Released on GitHub, 2019
+pyEntropy
