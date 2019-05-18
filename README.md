@@ -68,7 +68,7 @@ Note that elkai and its author are not affiliated with the LKH project. **Note:*
 
 You need CMake, a C compiler and Python 3.5+. You need to install the dev dependencies first: `pip install scikit-build ninja`. To build the library, run `python setup.py build` and `python setup.py install` to install it. To make a binary wheel, run `python setup.py bdist_wheel`.
 
-**How accurately does it solve TSP problems?**
+**How accurately does it solve asymmetric TSP problems?**
 
 Instances with known solutions, which are up to N=315 cities, [can be solved optimally](http://akira.ruc.dk/~keld/research/LKH/Soler_ATSP_results.html).
 
