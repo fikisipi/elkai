@@ -1,12 +1,11 @@
-elkai is solely available for research and
-non-commercial (re)use.
+elkai
+  by Filip Dimitrovski
+Due to the LKH restrictions, elkai is solely available
+for academic and non-commercial use and distribution.
+The CPython code and all wrapper code is free open
+source software: https://docs.python.org/3/license.html
 
-elkai contains the LKH project by
-Keld Helsgaun, who distributes the
-project by the same restrictions.
-
-elkai contains CPython code which
-is free open source software.
-
-Released on GitHub, 2019
-pyEntropy
+LKH (http://akira.ruc.dk/~keld/research/LKH/)
+  by Keld Helsgaun
+The code is distributed for academic and non-commercial use.
+The author reserves all rights to the code.
