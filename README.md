@@ -61,8 +61,8 @@ FAQ
 **What's the difference between LKH and elkai?**
 
 elkai is a library that contains the [LKH solver](http://akira.ruc.dk/~keld) and has some wrapper code to expose it to Python.
-The advantage is that you don't have to compile LKH yourself or download LKH executables and then manually parse the output.
-Note that elkai and its author are not affiliated with the LKH project, and both LKH and elkai are released for non-commercial use only.
+The advantage is that you don't have to compile LKH yourself or download its executables and then manually parse the output.
+Note that elkai and its author are not affiliated with the LKH project. **Note:** Helsgaun released the LKH project for non-commercial use only, so elkai must be used this way too.
 
 **How to manually build the library?**
 
