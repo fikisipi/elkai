@@ -19,6 +19,7 @@ Example usage
 ```python
 import numpy as np
 import elkai
+
 M = np.zeros((3, 3), dtype=int)
 M[0, 1] = 4
 M[1, 2] = 5
