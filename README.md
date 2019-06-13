@@ -17,11 +17,12 @@ Example usage
 ----------
 
 ```python
+import numpy as np
 import elkai
-elkai.solve_int_matrix([
-    [1, 1],
-    [1, 1]
-]) # Output: [0, 1]
+M = np.zeros((3, 3), dtype=int)
+M[0, 1] = 4
+M[1, 2] = 5
+elkai.solve_int_matrix(M) # Output: [0, 2, 1]
 ```
 
 Documentation
