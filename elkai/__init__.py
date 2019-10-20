@@ -13,7 +13,7 @@ def float_to_int(x):
     return int_sq
 
 
-def flatten_matrix(mat):
+def flatten_matrix(mat, mat_type=int):
     MAXINT = 2147483647
     N = len(mat)
     if N < 2:
@@ -26,7 +26,7 @@ def flatten_matrix(mat):
             int_col = int(column)
             if int_col > MAXINT:
                 raise TypeError("Distance must be < 2^31. Try the float version")
-            flattened.append(int(column))
+            flattened.append(mat_type(column))
     return flattened
 
 
@@ -36,5 +36,5 @@ def solve_int_matrix(matrix, runs=10):
 
 
 def solve_float_matrix(matrix, runs=10):
-    flat_mat = [float_to_int(float(x)) for x in flatten_matrix(matrix)]
+    flat_mat = [float_to_int(float(x)) for x in flatten_matrix(matrix, mat_type=float)]
     return solve(flat_mat, runs)
