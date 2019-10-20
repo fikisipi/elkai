@@ -2,14 +2,22 @@ skip_non_tags: true
 environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
-    - PYTHON: "C:\\Python35"
-    - PYTHON: "C:\\Python36"
-    - PYTHON: "C:\\Python37"
-    - PYTHON: "C:\\Python38"
-    - PYTHON: "C:\\Python35-x64"
-    - PYTHON: "C:\\Python36-x64"
-    - PYTHON: "C:\\Python37-x64"
-    - PYTHON: "C:\\Python38-x64"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON: "C:\\Python35"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON: "C:\\Python36"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON: "C:\\Python37"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON: "C:\\Python38"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON: "C:\\Python35-x64"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON: "C:\\Python36-x64"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON: "C:\\Python37-x64"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON: "C:\\Python38-x64"
 
 install:
   # We need wheel installed to build wheels
@@ -23,10 +31,11 @@ test_script:
   - sh: docker run --rm -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 /bin/bash /io/build_wheels.sh
 
 artifacts:
-  # bdist_wheel puts your built wheel in the dist directory
   - path: dist\*
 
-#on_success:
-#  You can use this step to upload your artifacts to a public website.
-#  See Appveyor's documentation for more details. Or you can simply
-#  access your wheels from the Appveyor "artifacts" tab for your build.
+deploy:
+  description: elkai appveyor wheels
+  provider: GitHub
+  auth_token:
+    secure: rdTufwRoahOQ+IUaB7OgWdL2U2VO0I40kjKxiN8iaacMzxhn/sBx72TIOIf3GWAf
+
