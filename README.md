@@ -10,7 +10,7 @@ Keld Helsgaun.
 💻 **Supported platforms:** elkai is available on Windows, Linux, OS X for Python 3.5 and above as a binary wheel.
 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/s6pc44ha0ouqkbs1?svg=true)](https://ci.appveyor.com/project/dimitrovskif/elkai-aydrn)
+[![Build status](https://ci.appveyor.com/api/projects/status/agi76gjl3e2m00oq?svg=true)](https://ci.appveyor.com/project/filipArena/elkai)
 [![image](https://img.shields.io/pypi/v/elkai.svg)](https://pypi.org/project/elkai/)
 
 Example usage 
