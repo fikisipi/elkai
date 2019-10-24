@@ -4,6 +4,7 @@ if: tag IS present
 matrix:
   include:
     - os: osx
+      osx_image: xcode11
       before_install:
         - export PATH="$HOME/.pyenv/shims:$HOME/.pyenv/bin:$PATH"
         - brew update
