@@ -9,8 +9,8 @@ MPATH="$PATH"
 for PYBIN in /opt/python/cp3*/bin; do
     PATH="${PYBIN}/:${MPATH}"
     "${PYBIN}/pip" install --upgrade pip
-    "${PYBIN}/python" -c 'import sys; from pip._internal import main; sys.exit(main.main())' install scikit-build cmake ninja
-    "${PYBIN}/python" -c 'import sys; from pip._internal import main; sys.exit(main.main())' wheel /io/ -w dist/
+    "${PYBIN}/python" -m pip install scikit-build cmake ninja
+    "${PYBIN}/python" -m pip wheel /io/ -w dist/
     /bin/rm -rf /io/_skbuild
     /bin/rm -rf /io/CMakeFiles || true
 done
