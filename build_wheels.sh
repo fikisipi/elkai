@@ -2,14 +2,13 @@
 set -e -x
 
 # Install a system package required by our library
-yum install -y atlas-devel
+yum install -y atlas-devel cmake
 
 MPATH="$PATH"
 # Compile wheels
 for PYBIN in /opt/python/cp3*/bin; do
     PATH="${PYBIN}/:${MPATH}"
-    "${PYBIN}/pip" install --upgrade pip
-    "${PYBIN}/python" -m pip install scikit-build cmake ninja
+    "${PYBIN}/python" -m pip install scikit-build ninja
     "${PYBIN}/python" -m pip wheel /io/ -w dist/
     /bin/rm -rf /io/_skbuild
     /bin/rm -rf /io/CMakeFiles || true
