@@ -11,7 +11,6 @@ matrix:
         - pyenv install 3.5.5
         - pyenv install 3.6.5
         - pyenv install 3.7.0b3
-        - pyenv install 3.8-dev
         - pyenv global 3.5.5
 script:
   - pyenv global 3.5.5
@@ -21,9 +20,6 @@ script:
   - python -m pip install scikit-build ninja
   - python setup.py bdist_wheel
   - pyenv global 3.7.0b3
-  - python -m pip install scikit-build ninja
-  - python setup.py bdist_wheel
-  - pyenv global 3.8-dev
   - python -m pip install scikit-build ninja
   - python setup.py bdist_wheel
 deploy:
