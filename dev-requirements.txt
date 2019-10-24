@@ -1,3 +1,0 @@
-scikit-build
-cmake
-ninja
