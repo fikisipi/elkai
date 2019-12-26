@@ -44,21 +44,22 @@ _OBJ = Activate.o AddCandidate.o AddExtraCandidates.o                  \
        SolveSubproblemBorderProblems.o SolveTourSegmentSubproblems.o   \
        Statistics.o StoreTour.o SymmetrizeCandidateSet.o               \
        TrimCandidateSet.o WriteCandidates.o WritePenalties.o           \
-       WriteTour.o MergeWithTourGPX2.o gpx.o
+       WriteTour.o MergeWithTourGPX2.o gpx.o elkai.o
              
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -fPIC -c -o $@ $< $(CFLAGS)
 
 .PHONY: 
 	all clean
 
 all:
+	mkdir -p OBJ
 	$(MAKE) LKH
 
 LKH: $(OBJ) $(DEPS)
-	$(CC) -o ../LKH $(OBJ) $(CFLAGS) -lm
+	$(CC) -shared -fPIC -o ../libelkai.so $(OBJ) $(CFLAGS) -lm
 
 clean:
 	/bin/rm -f $(ODIR)/*.o ../LKH *~ ._* $(IDIR)/*~ $(IDIR)/._* 
