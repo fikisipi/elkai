@@ -6,7 +6,7 @@ yum install -y atlas-devel
 
 MPATH="$PATH"
 
-# Don't need this hack anymore!
+# Don't need this hack anymore, cmake is available!
 if [[ 0 -eq 1 ]]; then
 # Reuse 3.7 CMake for 3.8
 for PYBIN in /opt/python/cp37*/bin; do
