@@ -20,7 +20,7 @@ fi
 for PYBIN in /opt/python/cp3*/bin; do
     PATH="${PYBIN}/:${MPATH}"
     #if [[ $PYBIN != *"cp38"* ]]; then
-    #      "${PYBIN}/python" -m pip install cmake
+    "${PYBIN}/python" -m pip install cmake
     #fi
     "${PYBIN}/python" -m pip install scikit-build ninja
     "${PYBIN}/python" -m pip wheel /io/ -w dist/
