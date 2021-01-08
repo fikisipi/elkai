@@ -28,7 +28,7 @@ script:
   - pyenv global 3.8.6
   - python -m pip install scikit-build ninja
   - python setup.py bdist_wheel
-  - python global 3.9.0
+  - pyenv global 3.9.0
   - python -m pip install scikit-build ninja
   - python setup.py bdist_wheel
 deploy:
