@@ -46,5 +46,5 @@ deploy:
   description: elkai appveyor wheels
   provider: GitHub
   auth_token:
-    secure: rdTufwRoahOQ+IUaB7OgWdL2U2VO0I40kjKxiN8iaacMzxhn/sBx72TIOIf3GWAf
+    secure: l2/x6ISW6ORT4CDUeaKXBJdYmAuILi1GiYKRyxHM5hy36vN5csjgqwXUIPFqiGHp
 
