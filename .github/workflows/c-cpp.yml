@@ -14,3 +14,4 @@ jobs:
       uses: RalfG/python-wheels-manylinux-build@v0.3.3
       with:
         python-versions: 'cp36-cp36m cp37-cp37m cp38-cp38 cp39-cp39'
+        pre-build-command: 'pip install cmake scikit-build ninja'
