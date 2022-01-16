@@ -30,7 +30,7 @@ Documentation
 -------------
 
 
-**solve_int_matrix(matrix, runs=10)** solves an instance of the asymmetric TSP problem with integer distances.
+**elkai.solve_int_matrix(matrix, runs=10)** solves an instance of the asymmetric TSP problem with integer distances.
 
 * `matrix`:
    *an N\*N matrix representing an integer distance matrix between cities.*
@@ -54,17 +54,11 @@ Documentation
 
 
 
-**solve_float_matrix(matrix, runs=10)** has the same signature as the previous, but allows floating point distances.
+**elkai.solve_float_matrix(matrix, runs=10)** has the same signature as the previous, but allows floating point distances.
 It may be inaccurate.
 
 FAQ
 ----------------------
-
-**What's the difference between LKH and elkai?**
-
-elkai is a library that contains the [LKH solver](http://akira.ruc.dk/~keld) and has some wrapper code to expose it to Python.
-The advantage is that you don't have to compile LKH yourself or download its executables and then manually parse the output.
-Note that elkai and its author are not affiliated with the LKH project. **Note:** Helsgaun released the LKH project for non-commercial use only, so elkai must be used this way too.
 
 **How to manually build the library?**
 
@@ -74,9 +68,10 @@ You need CMake, a C compiler and Python 3.5+. You need to install the dev depend
 
 Instances with known solutions, which are up to N=315 cities, [can be solved optimally](http://akira.ruc.dk/~keld/research/LKH/Soler_ATSP_results.html).
 
-**Can you run multiple threads?**
+**What's the difference between LKH and elkai?**
 
-The library doesn't not release the GIL during the solution search, so other threads will be blocked. If you want to solve multiple problems
-concurrently you may try the [multiprocessing](https://docs.python.org/3.7/library/multiprocessing.html) module. 
+elkai packages the C LKH code into a nicer C library and then wraps it and compiles it into a Python wheel. **Note:** Dr. Helsgaun has released the LKH project for non-commercial use only, so elkai as a derivative work must be used this way too.
 
-*P.S.:* The LKH solver was written in C with one problem per process in mind. We try to clean up the global state before and after solving a problem, but leaks are possible - if you want to help out, run Valgrind or similar diagnostics and submit an issue/PR.
+**Does it lock the GIL during a run?**
+
+Yes.
