@@ -62,7 +62,7 @@ FAQ
 
 **How to manually build the library?**
 
-You need CMake, a C compiler and Python 3.5+. You need to install the dev dependencies first: `pip install scikit-build ninja`. To build the library, run `python setup.py build` and `python setup.py install` to install it. To make a binary wheel, run `python setup.py bdist_wheel`.
+You need CMake, a C compiler and Python 3.5+. You need to install the dev dependencies first: `pip install scikit-build ninja`. To build and install, run `python setup.py install`.
 
 **How accurately does it solve asymmetric TSP problems?**
 
