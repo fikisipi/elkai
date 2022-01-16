@@ -21,5 +21,6 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install wheel
+        pip install wheel cmake
+        pip install scikit-build ninja
         python setup.py bdist_wheel
