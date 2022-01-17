@@ -23,19 +23,21 @@ import elkai
 M = np.zeros((3, 3), dtype=int)
 M[0, 1] = 4
 M[1, 2] = 5
-elkai.solve_int_matrix(M) # Output: [0, 2, 1]
+
+print(elkai.solve_int_matrix(M))
+# Output: [0, 2, 1]
 ```
 
 Documentation
 -------------
 
 
-**elkai.solve_int_matrix(matrix, runs=10)** solves an instance of the asymmetric TSP problem with integer distances.
+**elkai.solve_int_matrix(matrix, runs=10)**:
 
 * `matrix`:
    *an N\*N matrix representing an integer distance matrix between cities.*
    
-   *An example of N=3 city arrangement:*
+   * N=3 example: (can be any indexed structure: list, numpy array etc)
    ```python
    [                  # cities are zero indexed, d() is distance
        [0, 4,  9],    # d(0, 0), d(0, 1), d(0, 2)
@@ -48,7 +50,7 @@ Documentation
   *An integer representing how many iterations the solver should
   perform. By default, 10.*
 
-* Return value: *The tour represented as a list of indices. The indices are
+* **Returns**: *The tour represented as a list of indices. The indices are
    zero-indexed and based on the distance matrix order.*
 
 
