@@ -1,4 +1,4 @@
-name: Python
+name: Python build
 
 on: workflow_dispatch
 jobs:
