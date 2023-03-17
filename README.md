@@ -57,7 +57,7 @@ An example matrix with 3 cities would be:
 ]
 ```
 
-So, the output would be `[0, 2, 1]` because it's best to visit `first city => third city => second city`.
+So, the output would be `[0, 2, 1]` because it's best to visit `0 => 2 => 1 => 0`.
 
 ⚠️ The final return to the start is implied and **is NOT** part of the output list, i.e. `len(output) == N`
 
