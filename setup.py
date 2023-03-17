@@ -9,7 +9,7 @@ setup(
     description="A TSP solver for Python without any dependencies.",
     #long_description=long_description,
     #long_description_content_type='text/markdown',
-    url="https://github.com/filipArena/elkai",
+    url="https://github.com/fikisipi/elkai",
     version="0.1.2",
     packages=['elkai'],
     author="Filip Dimitrovski",
