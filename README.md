@@ -57,10 +57,15 @@ An example matrix with 3 cities would be:
 ]
 ```
 
-And the output would be `[0, 2, 1]` because it's best to visit `first city => third city => second city`
+So, the output would be `[0, 2, 1]` because it's best to visit `first city => third city => second city`.
 
+⚠️ The final return to the start is implied and **is NOT** part of the output list, i.e. `len(output) == N`
 
-**elkai.solve_float_matrix(matrix: List[List[float]], runs=10) -> List** same behaviour as above, with floats supported.
+----
+
+**elkai.solve_float_matrix(matrix: List[List[float]], runs=10) -> List**
+
+Same behaviour as above, with float distances supported. Note that there may be precision issues.
 
 FAQ
 ----------------------
