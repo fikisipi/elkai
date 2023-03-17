@@ -23,40 +23,42 @@ M = np.zeros((3, 3), dtype=int)
 M[0, 1] = 4
 M[1, 2] = 5
 
-print(elkai.solve_int_matrix(M))
+solution = elkai.solve_int_matrix(M)
+
+print(solution)
 # Output: [0, 2, 1]
+```
+
+```mermaid
+graph TD;
+    0-->|4|1;
+    0-->|0|2;
+    1-->|5|2;
 ```
 
 Documentation
 -------------
 
 
-**elkai.solve_int_matrix(matrix, runs=10)**:
+**elkai.solve_int_matrix(matrix: List[List[int]], runs=10) -> List**
 
-* `matrix`:
-   *an N\*N matrix representing an integer distance matrix between cities.*
-   
-   * N=3 example: (can be any indexed structure: list, numpy array etc)
-   ```python
-   [                  # cities are zero indexed, d() is distance
-       [0, 4,  9],    # d(0, 0), d(0, 1), d(0, 2)
-       [4, 0, 10],    # d(1, 0), d(1, 1), ...
-       [2, 4,  0]     # ... and so on
-   ]
-   ```
+* `matrix` is a list of lists or **2D numpy array** containing the distances between cities
+* `runs` is the solver iteration count
 
-* `runs`:
-  *An integer representing how many iterations the solver should
-  perform. By default, 10.*
+An example matrix with 3 cities would be:
 
-* **Returns**: *The tour represented as a list of indices. The indices are
-   zero-indexed and based on the distance matrix order.*
+```python
+[                 # cities are zero indexed, d() is distance
+   [0, 4,  3],    # d(0, 0), d(0, 1), d(0, 2)
+   [4, 0, 10],    # d(1, 0), d(1, 1), ...
+   [2, 4,  0]     # ... and so on
+]
+```
+
+And the output would be `[0, 2, 1]` because it's best to visit `first city => third city => second city`
 
 
-
-
-**elkai.solve_float_matrix(matrix, runs=10)** has the same signature as the previous, but allows floating point distances.
-It may be inaccurate.
+**elkai.solve_float_matrix(matrix: List[List[float]], runs=10) -> List** same behaviour as above, with floats supported.
 
 FAQ
 ----------------------
