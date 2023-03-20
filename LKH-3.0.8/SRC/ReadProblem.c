@@ -373,15 +373,24 @@ static int TwoDWeightType(void);
 static int ThreeDWeightType(void);
 static void Convert2FullMatrix(void);
 
+extern char *ReadLineBuf;
+
 void ReadProblem()
 {
     int i, j, K;
     char *Line, *Keyword;
 
-    if (!(ProblemFile = fopen(ProblemFileName, "r")))
-        eprintf("Cannot open PROBLEM_FILE: \"%s\"", ProblemFileName);
-    if (TraceLevel >= 1)
-        printff("Reading PROBLEM_FILE: \"%s\" ... ", ProblemFileName);
+    if(!strcmp(ProblemFileName, ":empty:")) {
+        ProblemFile = 0;
+        if(!strcmp(ReadLineBuf, ":empty:")) {
+            ReadLineBuf = DEFAULT_PROBLEM;
+        }
+    } else {
+        if (!(ProblemFile = fopen(ProblemFileName, "r")))
+            eprintf("Cannot open PROBLEM_FILE: \"%s\"", ProblemFileName);
+        if (TraceLevel >= 1)
+            printff("Reading PROBLEM_FILE: \"%s\" ... ", ProblemFileName);
+    }
     FreeStructures();
     FirstNode = 0;
     WeightType = WeightFormat = ProblemType = -1;
@@ -773,9 +782,11 @@ void ReadProblem()
     if (TraceLevel >= 1) {
         printff("done\n");
         PrintParameters();
-    } else
-        printff("PROBLEM_FILE = %s\n",
-                ProblemFileName ? ProblemFileName : "");
+    } else {
+        // printff("PROBLEM_FILE = %s\n",
+                // ProblemFileName ? ProblemFileName : "");
+    }
+    if(ProblemFile != 0)
     fclose(ProblemFile);
     if (InitialTourFileName)
         ReadTour(InitialTourFileName, &InitialTourFile);
@@ -1327,13 +1338,22 @@ static void Read_EDGE_WEIGHT_SECTION()
         Dimension--;
     if (Scale < 1)
         Scale = 1;
+    if(WeightFormat != FULL_MATRIX) {
+        eprintf("EDGE_WEIGHT_SECTION: Weight format not FULL_MATRIX");
+    }
     switch (WeightFormat) {
     case FULL_MATRIX:
         for (i = 1; i <= Dim; i++) {
             Ni = &NodeSet[i];
             for (j = 1; j <= Dim; j++) {
+                if(ProblemFile != 0) {
                 if (!fscanf(ProblemFile, "%lf", &w))
                     eprintf("EDGE_WEIGHT_SECTION: Missing weight");
+                } else {
+                    w = strtof(ReadLineBuf, &ReadLineBuf);
+                    // if(!sscanf(ReadLineBuf, "%lf", &w))
+                    // eprintf("EDGE_WEIGHT_SECTION: Missing weight");
+                }
                 W = round(Scale * w);
                 if (Asymmetric) {
                     Ni->C[j] = W;

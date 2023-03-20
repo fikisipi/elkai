@@ -485,8 +485,28 @@ static char *ReadYesOrNo(int *V);
 #undef max
 static size_t max(size_t a, size_t b);
 
+extern char *ReadLineBuf;
+
+void _Reset1();
+void _Reset2();
+void _Reset3();
+void _Reset4();
+void _Reset5();
+void _Reset6();
+void _Reset7();
+void _Reset8();
+
 void ReadParameters()
 {
+    _Reset1();
+    _Reset2();
+    _Reset3();
+    _Reset4();
+    _Reset5();
+    _Reset6();
+    _Reset7();
+    _Reset8();
+
     char *Line, *Keyword, *Token, *Name;
     unsigned int i;
 
@@ -575,7 +595,7 @@ void ReadParameters()
             eprintf("Cannot open PARAMETER_FILE: \"%s\"",
                     ParameterFileName);
         printff("PARAMETER_FILE = %s\n", ParameterFileName);
-    } else {
+    } else if(0) {
         while (1) {
             printff("PARAMETER_FILE = ");
             if (!(ParameterFileName = GetFileName(ReadLine(stdin)))) {
@@ -589,6 +609,11 @@ void ReadParameters()
                         ParameterFileName);
             else
                 break;
+        }
+    } else {
+        ParameterFile = 0;
+        if(!strcmp(ReadLineBuf, ":empty:")) {
+            ReadLineBuf = DEFAULT_PARAMETERS;
         }
     }
     while ((Line = ReadLine(ParameterFile))) {
@@ -1175,9 +1200,11 @@ void ReadParameters()
         eprintf("SUBPROBLEM specification not possible for SALESMEN > 1");
     if (CandidateSetType != DELAUNAY)
         DelaunayPure = 0;
+    if(ParameterFile != 0)
     fclose(ParameterFile);
     free(LastLine);
     LastLine = 0;
+    ReadLineBuf = ":empty:";
 }
 
 static char *GetFileName(char *Line)

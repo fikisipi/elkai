@@ -19,6 +19,10 @@
 
 static Node *tp1;
 
+void _Reset8() {
+    tp1 = 0;
+}
+
 static int compare(const void *pa, const void *pb)
 {
     return BETWEEN(tp1, t[*(int *) pa], t[*(int *) pb]) ? -1 : 1;

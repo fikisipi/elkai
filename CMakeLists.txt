@@ -3,8 +3,8 @@ project(elkai)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(PythonExtensions REQUIRED)
 
-include_directories(${CMAKE_SOURCE_DIR}/LKH-2.0.9/SRC/INCLUDE)
-file(GLOB LKH_SRC "LKH-2.0.9/SRC/*.c")
+include_directories(${CMAKE_SOURCE_DIR}/LKH-3.0.8/SRC/INCLUDE)
+file(GLOB LKH_SRC "LKH-3.0.8/SRC/*.c")
 add_library(LKH ${LKH_SRC})
 target_compile_definitions(LKH PRIVATE TWO_LEVEL_TREE)
 

@@ -40,6 +40,12 @@ void SRandom(unsigned Seed)
 
 static int a = 0, b = 24, arr[55], initialized = 0;
 
+void _Reset6() {
+    a = 0;
+    b = 24;
+    initialized = 0;
+}
+
 unsigned Random()
 {
     int t;

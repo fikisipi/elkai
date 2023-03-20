@@ -20,8 +20,35 @@ static int EndOfLine(FILE * InputFile, int c)
     return EOL;
 }
 
+char *ReadLineBuf = ":empty:";
+#include "gb_string.h"
+
 char *ReadLine(FILE * InputFile)
 {
+    if(InputFile == 0) {
+        if(ReadLineBuf[0] == '\0') {
+            return 0;
+        }
+
+        gbString currentLine = gb_make_string("");
+
+        while(ReadLineBuf[0] != '\0') {
+            char singleCh[2];
+            singleCh[0] = ReadLineBuf[0];
+            singleCh[1] = '\0';
+
+            currentLine = gb_append_cstring(currentLine, singleCh);
+
+            ReadLineBuf++;
+            if(ReadLineBuf[0] == '\n') {
+                ReadLineBuf++;
+                break;
+            }
+        }
+
+        return (char*)currentLine;
+    }
+
     int i, c;
 
     if (Buffer == 0)

@@ -34,10 +34,16 @@
    A detailed description of the different cases can be found after the code.
  */
 
+static Node *s1 = 0;
+static short OldReversed = 0;
+
+void _Reset1() {
+    s1 = 0;
+    OldReversed = 0;
+}
+
 GainType Gain23()
 {
-    static Node *s1 = 0;
-    static short OldReversed = 0;
     Node *s2, *s3, *s4, *s5, *s6 = 0, *s7, *s8 = 0, *s1Stop, *SUCs1;
     Candidate *Ns2, *Ns4, *Ns6;
     GainType G0, G1, G2, G3, G4, G5, G6, Gain, Gain6;
