@@ -69,10 +69,10 @@ static PyObject *ElkSolve(PyObject *self, PyObject *args)
 
     free(weights);
     free(matrixBuff);
-    PyObject *list = PyList_New(tourN);
-    for (i = 0; i < tourN; i++)
+    PyObject *list = PyList_New(pyLenSqrt);
+    for (i = 0; i < pyLenSqrt; i++)
     {
-        PyObject *tourElement = PyLong_FromLong((long)tourBuff[i]);
+        PyObject *tourElement = PyLong_FromLong((long)(tourBuff[i] - 1));
         PyList_SetItem(list, i, tourElement);
     }
 
