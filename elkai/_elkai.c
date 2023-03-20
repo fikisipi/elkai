@@ -2,14 +2,12 @@
 #include "math.h"
 
 // TODO:
-// - Delete obsolete problem types
-// - LKH feature: Allow coordinate based input instead of distances?
-// - LKH feature: Add a known optimal cost input variable?
-// - LKH feature: Add known optimal subtours?
-// - Make sure camel case is used everywhere
-// - Use git submodule instead of a LKH copy
-
-// static int InvokeSolver(int *matrixBuff, int matrixLen, int runCount, int *tourBuff, int *tourN);
+// 1. Change float matrix handling
+// 2. Check for the new type of memory leaks after introducing LKH3
+// 3. Clean up the CMakeLists.txt
+// 4. Add coordinate input
+// 5. Support vehicle routing problems
+// 6. Add readthedocs.io and better README / graph images
 
 extern int ElkaiSolveATSP(int dimension, float *weights, int *tour, int runs);
 
@@ -47,7 +45,6 @@ static PyObject *ElkSolve(PyObject *self, PyObject *args)
     int *matrixBuff = (int *)malloc(sizeof(int) * pyLen);
     float *weights = (float*)malloc(sizeof(float) * pyLen);
     int *tourBuff = (int *)malloc(sizeof(int) * pyLenSqrt);
-    int tourN = 0;
 
     long i;
     for (i = 0; i < pyLen; i++)
@@ -64,7 +61,6 @@ static PyObject *ElkSolve(PyObject *self, PyObject *args)
         weights[i] = (float)justNumber_i;
     }
 
-    // int norm_result = InvokeSolver(matrixBuff, pyLen, runCount, tourBuff, &tourN);
     ElkaiSolveATSP(pyLenSqrt, weights, tourBuff, runCount);
 
     free(weights);
