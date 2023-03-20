@@ -1,3 +1,7 @@
+/LKH-3.0.8/LKH
+/LKH-3.0.8/SRC/OBJ/*.o
+.idea
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

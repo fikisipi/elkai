@@ -16,11 +16,16 @@
  * The function is called from the CreateCandidateSet function. 
  */
 
+static int PenaltiesRead = 0;
+
+void _Reset7() {
+    PenaltiesRead = 0;
+}
+
 int ReadPenalties()
 {
     int i, Id;
     Node *Na, *Nb = 0;
-    static int PenaltiesRead = 0;
 
     if (PiFileName == 0)
         return 0;

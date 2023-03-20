@@ -1,6 +1,17 @@
 #ifndef _LKH_H
 #define _LKH_H
 
+#define DEFAULT_PARAMETERS "RUNS = 10\nTRACE_LEVEL = 0\nPROBLEM_FILE = :empty:\n"
+#define DEFAULT_PROBLEM "TYPE : ATSP\n\
+DIMENSION : 3\n\
+EDGE_WEIGHT_TYPE: EXPLICIT\n\
+EDGE_WEIGHT_FORMAT: FULL_MATRIX\n\
+EDGE_WEIGHT_SECTION\n\
+0 4 0\n\
+0 0 5\n\
+0 0 0\n\
+"
+
 /*
  * This header is used by almost all functions of the program. It defines 
  * macros and specifies data structures and function prototypes.

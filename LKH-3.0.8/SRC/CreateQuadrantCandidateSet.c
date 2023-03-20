@@ -23,6 +23,10 @@ static ContainsFunction Contains;
 static BoxOverlapsFunction BoxOverlaps;
 static int Level = 0;
 
+void _Reset3() {
+    Level = 0;
+}
+
 /*
  * The CreateQuadrantCandidateSet function creates for each node 
  * a candidate set consisting of the K/L least costly neighbor edges

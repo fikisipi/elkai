@@ -22,6 +22,13 @@ static int ShortestCycle(int M, int k);
 static int Cycle(Node * N, int k);
 
 static int CurrentCycle, Patchwork = 0, RecLevel = 0;
+
+void _Reset5() {
+    CurrentCycle = 0;
+    Patchwork = 0;
+    RecLevel = 0;
+}
+
 #define MaxPatchwork Dimension
 
 /*
@@ -281,6 +288,8 @@ static int Cycle(Node * N, int k)
     }
     return cycle[p[2 * Low]];
 }
+
+
 
 /*
  * The ShortestCycle function returns the number of the cycle with

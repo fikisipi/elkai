@@ -10,6 +10,10 @@
 
 static int Level = 0;
 
+void _Reset2() {
+    Level = 0;
+}
+
 void CreateDelaunayCandidateSet()
 {
     Node *From, *To;
