@@ -10,7 +10,7 @@ setup(
     #long_description=long_description,
     #long_description_content_type='text/markdown',
     url="https://github.com/fikisipi/elkai",
-    version="0.1.2",
+    version="0.1.3",
     packages=['elkai'],
     author="Filip Dimitrovski",
     license="MIT",
