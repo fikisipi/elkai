@@ -65,7 +65,7 @@ extern char *ReadLineBuf;
 #define GB_STRING_IMPLEMENTATION
 #include "gb_string.h"
 
-int TspSolve(int dimension, float *weights, int *tour, int runs)
+int ElkaiSolveATSP(int dimension, float *weights, int *tour, int runs)
 {
     GainType Cost, OldOptimum;
     double Time, LastTime;
@@ -242,11 +242,11 @@ int TspSolve(int dimension, float *weights, int *tour, int runs)
  * This file contains the main function of the program.
  */
 
-int main(int argc, char * argv[])
+int main2(int argc, char * argv[])
 {
     float WW[] = {0, 4, 0, 0, 0, 5, 0, 0, 0};
     int result[3];
-    TspSolve(3, WW, result, 10);
+    ElkaiSolveATSP(3, WW, result, 10);
     for(int i = 0; i < 3; i++) {
         printf("%d ", result[i]);
     }

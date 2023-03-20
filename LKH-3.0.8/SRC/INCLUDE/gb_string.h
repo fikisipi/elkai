@@ -204,7 +204,7 @@ int main(int argc, char **argv) {
 #endif
 
 #ifndef _MSC_VER
-	#ifdef __cplusplus
+	#ifdef __cplusplus2
 	#define gb_inline inline
 	#else
 	#define gb_inline
@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
 
 #include <string.h> /* Needed for memcpy and cstring functions */
 
-#ifdef __cplusplus
+#ifdef __cplusplus2
 extern "C" {
 #endif
 
@@ -233,8 +233,8 @@ typedef size_t gbUsize;
 #endif
 
 #ifndef GB_NULLPTR
-	#if __cplusplus
-		#if __cplusplus >= 201103L
+	#if __cplusplus2
+		#if __cplusplus2 >= 201103L
 		#define GB_NULLPTR nullptr
 		#else
 		#define GB_NULLPTR 0
@@ -277,13 +277,13 @@ gbBool gb_strings_are_equal(gbString const lhs, gbString const rhs);
 gbString gb_trim_string(gbString str, char const *cut_set);
 
 
-#ifdef __cplusplus
+#ifdef __cplusplus2
 }
 #endif
 
 #if defined(GB_STRING_CPP)
 
-#if !defined(__cplusplus)
+#if !defined(__cplusplus2)
 #error You need to compile as C++ for the C++ version of gb_string.h to work
 #endif
 
