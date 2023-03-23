@@ -1,20 +1,15 @@
 # elkai - A Python solver for the Travelling Salesman Problem / TSP
 
-elkai is a Python 3 library for solving [travelling salesman problems](https://en.wikipedia.org/wiki/Travelling_salesman_problem):
+[elkai](https://pypi.org/project/elkai/) is a Python 3 library for solving [travelling salesman problems](https://en.wikipedia.org/wiki/Travelling_salesman_problem):
 
 * ⚡ running fast native code with prebuilt wheels for most platforms
 * 🗺️ based on [LKH](http://akira.ruc.dk/~keld/research/LKH/) by Keld Helsgaun, with proven optimal solutions up to N=315
 * 🛣️ supports asymmetric distances (ATSP)
 
-## Installation
-
-💾 **To install it** run `pip install elkai`
-
 [![Python build](https://github.com/fikisipi/elkai/actions/workflows/python-app.yml/badge.svg)](https://github.com/fikisipi/elkai/actions/workflows/python-app.yml)
 [![image](https://img.shields.io/pypi/v/elkai.svg)](https://pypi.org/project/elkai/)
 
-Example usage 
-----------
+## Example usage 
 
 ```python
 import numpy as np
@@ -38,6 +33,10 @@ graph TD;
     1-->|5|2;
     2-->|0|1;
 ```
+
+## Installation
+
+💾 **To install it** run `pip install elkai`
 
 Documentation
 -------------
