@@ -68,21 +68,8 @@ So, the output would be `[0, 2, 1]` because it's best to visit `0 => 2 => 1 => 0
 
 Same behaviour as above, with float distances supported. Note that there may be precision issues.
 
-FAQ
-----------------------
+## Notes
 
-**How to manually build the library?**
+elkai takes the **global interpreter lock (GIL)** during the solving phase which means two threads cannot solve problems at the same time. If you want to run other workloads at the same time, you have to run another process - for example by using the `multiprocessing` module.
 
-You need CMake, a C compiler and Python 3.5+. You need to install the dev dependencies first: `pip install scikit-build ninja`. To build and install, run `python setup.py install`.
-
-**How accurately does it solve asymmetric TSP problems?**
-
-Instances with known solutions, which are up to N=315 cities, [can be solved optimally](http://akira.ruc.dk/~keld/research/LKH/Soler_ATSP_results.html).
-
-**What's the difference between LKH and elkai?**
-
-elkai packages the C LKH code into a nicer C library and then wraps it and compiles it into a Python wheel. **Note:** Dr. Helsgaun has released the LKH project for non-commercial use only, so elkai as a derivative work must be used this way too.
-
-**Does it lock the GIL during a run?**
-
-Yes.
+The LKH native code by Helsgaun is released for non-commercial use only. Therefore the same restriction applies to elkai, which is explained in the `LICENSE` file. If there isn't a prebuilt wheel for your platform, you'll have to follow the `scikit-build` process.
