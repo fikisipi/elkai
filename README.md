@@ -2,7 +2,7 @@
 
 elkai is a Python 3 library for solving [travelling salesman problems](https://en.wikipedia.org/wiki/Travelling_salesman_problem):
 
-* ⚡ running fast native code
+* ⚡ running fast native code with prebuilt wheels for most platforms
 * 🗺️ based on [LKH](http://akira.ruc.dk/~keld/research/LKH/) by Keld Helsgaun, with proven optimal solutions up to N=315
 * 🛣️ supports asymmetric distances (ATSP)
 
