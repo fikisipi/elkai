@@ -14,4 +14,5 @@ setup(
     packages=['elkai'],
     author="Filip Dimitrovski",
     license="MIT",
+    python_requires=">=3.6"
 )
