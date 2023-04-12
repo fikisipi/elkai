@@ -6,7 +6,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="elkai",
-    description="A TSP solver for Python without any dependencies.",
+    description="A Python solver for the travelling salesman problem - TSP based on native/fast LKH",
     #long_description=long_description,
     #long_description_content_type='text/markdown',
     url="https://github.com/fikisipi/elkai",
@@ -14,4 +14,5 @@ setup(
     packages=['elkai'],
     author="Filip Dimitrovski",
     license="MIT",
+    python_requires=">=3.6"
 )

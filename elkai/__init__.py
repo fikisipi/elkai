@@ -1,4 +1,5 @@
 from ._elkai import solve
+from . import utils
 import struct
 
 
