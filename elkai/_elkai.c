@@ -1,5 +1,6 @@
 #include <Python.h>
 #include "math.h"
+#include "gb_string.h"
 
 // TODO:
 // 1. Change float matrix handling
@@ -10,6 +11,49 @@
 // 6. Add readthedocs.io and better README / graph images
 
 extern int ElkaiSolveATSP(int dimension, float *weights, int *tour, int runs);
+extern void ElkaiSolveProblem(gbString params, gbString problem, int *tourSize, int *tour);
+
+static PyObject *PySolveProblem(PyObject *self, PyObject *args)
+{
+    if(PyObject_Length(args) != 2) {
+        PyErr_SetString(PyExc_TypeError, "Expected two arguments");
+        return 0;
+    }
+
+    PyObject *arg1 = PyObject_GetItem(args, PyLong_FromLong(0));
+    PyObject *arg2 = PyObject_GetItem(args, PyLong_FromLong(1));
+
+    if(!PyUnicode_Check(arg1) || !PyUnicode_Check(arg2)) {
+        PyErr_SetString(PyExc_TypeError, "Arguments should be strings");
+        return 0;
+    }
+
+    const char *paramsStr = PyUnicode_AsUTF8(arg1);
+    const char *problemStr = PyUnicode_AsUTF8(arg2);
+
+    gbString params = gb_make_string(paramsStr);
+    gbString problem = gb_make_string(problemStr);
+
+    int tourSize = 0;
+    int *tourPtr;
+
+    ElkaiSolveProblem(params, problem, &tourSize, &tourPtr);
+
+    if(PyErr_Occurred() != 0) {
+        return 0;
+    }
+
+    PyObject *list = PyList_New(tourSize);
+    int i = 0;
+    for (i = 0; i < tourSize; i++)
+    {
+        PyObject *tourElement = PyLong_FromLong((long)(tourPtr[i]));
+        PyList_SetItem(list, i, tourElement);
+    }
+    gb_free_string(params);
+    gb_free_string(problem);
+    return list;
+}
 
 static PyObject *ElkSolve(PyObject *self, PyObject *args)
 {
@@ -82,14 +126,17 @@ static char elk_docs[] =
 static PyMethodDef funcs[] = {
     {"solve", (PyCFunction) ElkSolve,
      METH_VARARGS, elk_docs},
-    {NULL}};
+     {"solve_problem", (PyCFunction) PySolveProblem, METH_VARARGS, ""},
+    {NULL}
+};
 
 static struct PyModuleDef elkDef = {
     PyModuleDef_HEAD_INIT,
     "_elkai",
     "",
     -1,
-    funcs};
+    funcs
+};
 
 PyMODINIT_FUNC PyInit__elkai(void)
 {

@@ -23,6 +23,7 @@ static void ReadableTourClear() {
     ReadableTourAllocated = 100;
     if(ReadableTour != 0) {
         free(ReadableTour);
+        ReadableTour = 0;
     }
 }
 
@@ -60,20 +61,160 @@ void TheTour(int *Tour, GainType Cost)
     }
 }
 
-extern char *ReadLineBuf;
-
 #define GB_STRING_IMPLEMENTATION
 #include "gb_string.h"
+
+extern void ClearLines();
+extern void WriteLine(gbString str);
+
+void ElkaiSolveProblem(gbString params, gbString problem, int *tourSize, int **tourPtr) {
+    ClearLines();
+    WriteLine(params);
+    ReadParameters();
+    GainType Cost, OldOptimum;
+    double Time, LastTime;
+    StartTime = LastTime = GetTime();
+    MaxMatrixDimension = 20000;
+    MergeWithTour =
+        Recombination == GPX2 ? MergeWithTourGPX2 :
+        Recombination == CLARIST ? MergeWithTourCLARIST :
+                                   MergeWithTourIPT;
+
+    WriteLine(problem);
+
+    ReadProblem();
+    AllocateStructures();
+    CreateCandidateSet();
+    InitializeStatistics();
+
+    if (Norm != 0 || Penalty) {
+        Norm = 9999;
+        BestCost = PLUS_INFINITY;
+        BestPenalty = CurrentPenalty = PLUS_INFINITY;
+    } else {
+        /* The ascent has solved the problem! */
+        Optimum = BestCost = (GainType) LowerBound;
+        UpdateStatistics(Optimum, GetTime() - LastTime);
+        RecordBetterTour();
+        RecordBestTour();
+        CurrentPenalty = PLUS_INFINITY;
+        BestPenalty = CurrentPenalty = Penalty ? Penalty() : 0;
+        TheTour(BestTour, BestCost);
+        Runs = 0;
+    }
+
+    /* Find a specified number (Runs) of local optima */
+
+    for (Run = 1; Run <= Runs; Run++) {
+        LastTime = GetTime();
+        if (LastTime - StartTime >= TotalTimeLimit) {
+            if (TraceLevel >= 1)
+                printff("*** Time limit exceeded ***\n");
+            Run--;
+            break;
+        }
+        Cost = FindTour();      /* using the Lin-Kernighan heuristic */
+        if (MaxPopulationSize > 1 && !TSPTW_Makespan) {
+            /* Genetic algorithm */
+            int i;
+            for (i = 0; i < PopulationSize; i++) {
+                Cost = MergeTourWithIndividual(i);
+            }
+            if (!HasFitness(CurrentPenalty, Cost)) {
+                if (PopulationSize < MaxPopulationSize) {
+                    AddToPopulation(CurrentPenalty, Cost);
+                    if (TraceLevel >= 1)
+                        PrintPopulation();
+                } else if (SmallerFitness(CurrentPenalty, Cost,
+                                          PopulationSize - 1)) {
+                    i = ReplacementIndividual(CurrentPenalty, Cost);
+                    ReplaceIndividualWithTour(i, CurrentPenalty, Cost);
+                    if (TraceLevel >= 1)
+                        PrintPopulation();
+                }
+            }
+        } else if (Run > 1 && !TSPTW_Makespan)
+            Cost = MergeTourWithBestTour();
+        if (CurrentPenalty < BestPenalty ||
+            (CurrentPenalty == BestPenalty && Cost < BestCost)) {
+            BestPenalty = CurrentPenalty;
+            BestCost = Cost;
+            RecordBetterTour();
+            RecordBestTour();
+            TheTour(BestTour, BestCost);
+        }
+        OldOptimum = Optimum;
+        if (!Penalty ||
+            (MTSPObjective != MINMAX && MTSPObjective != MINMAX_SIZE)) {
+            if (CurrentPenalty == 0 && Cost < Optimum)
+                Optimum = Cost;
+        } else if (CurrentPenalty < Optimum)
+            Optimum = CurrentPenalty;
+        if (Optimum < OldOptimum) {
+            if (FirstNode->InputSuc) {
+                Node *N = FirstNode;
+                while ((N = N->InputSuc = N->Suc) != FirstNode);
+            }
+        }
+        Time = fabs(GetTime() - LastTime);
+        UpdateStatistics(Cost, Time);
+        if (StopAtOptimum && MaxPopulationSize >= 1) {
+            if (ProblemType != CCVRP && ProblemType != TRP &&
+                ProblemType != MLP &&
+                MTSPObjective != MINMAX &&
+                MTSPObjective != MINMAX_SIZE ?
+                CurrentPenalty == 0 && Cost == Optimum :
+                CurrentPenalty == Optimum) {
+                Runs = Run;
+                break;
+            }
+        }
+        if (PopulationSize >= 2 &&
+            (PopulationSize == MaxPopulationSize ||
+             Run >= 2 * MaxPopulationSize) && Run < Runs) {
+            Node *N;
+            int Parent1, Parent2;
+            Parent1 = LinearSelection(PopulationSize, 1.25);
+            do
+                Parent2 = LinearSelection(PopulationSize, 1.25);
+            while (Parent2 == Parent1);
+            ApplyCrossover(Parent1, Parent2);
+            N = FirstNode;
+            do {
+                if (ProblemType != HCP && ProblemType != HPP) {
+                    int d = C(N, N->Suc);
+                    AddCandidate(N, N->Suc, d, INT_MAX);
+                    AddCandidate(N->Suc, N, d, INT_MAX);
+                }
+                N = N->InitialSuc = N->Suc;
+            } while (N != FirstNode);
+        }
+        SRandom(++Seed);
+    }
+
+    *tourSize = ReadableTourSize;
+
+    if(tourPtr != 0) {
+        *tourPtr = ReadableTour;
+    }
+
+//    if(tour != 0) {
+//        for(int M = 0; M < ReadableTourSize; M++) {
+//            tour[M] = ReadableTour[M];
+//        }
+//    }
+}
 
 int ElkaiSolveATSP(int dimension, float *weights, int *tour, int runs)
 {
     GainType Cost, OldOptimum;
     double Time, LastTime;
+    ClearLines();
+    WriteLine(gb_make_string("TRACE_LEVEL = 0\nPROBLEM_FILE = :stdin:\n"));
 
-    ReadLineBuf = gb_make_string("TRACE_LEVEL = 0\nPROBLEM_FILE = :empty:\n");
     char runsStr[100];
     sprintf(runsStr, "RUNS = %d\n", runs);
-    ReadLineBuf = gb_append_cstring(ReadLineBuf, runsStr);
+    WriteLine(gb_make_string(runsStr));
 
     ReadParameters();
 
@@ -83,42 +224,23 @@ int ElkaiSolveATSP(int dimension, float *weights, int *tour, int runs)
         Recombination == GPX2 ? MergeWithTourGPX2 :
         Recombination == CLARIST ? MergeWithTourCLARIST :
                                    MergeWithTourIPT;
-
-    ReadLineBuf = (char *) malloc(sizeof(char) * 1000);
     
     char dimensionStr[100];
     sprintf(dimensionStr, "DIMENSION : %d\n", dimension);
-    ReadLineBuf = gb_make_string("TYPE: ATSP\n");
-    ReadLineBuf = gb_append_cstring(ReadLineBuf, dimensionStr);
-    ReadLineBuf = gb_append_cstring(ReadLineBuf, "EDGE_WEIGHT_TYPE: EXPLICIT\nEDGE_WEIGHT_FORMAT: FULL_MATRIX\nEDGE_WEIGHT_SECTION\n");
+    WriteLine(gb_make_string("TYPE: ATSP\n"));
+    WriteLine(gb_make_string(dimensionStr));
+    WriteLine(gb_make_string("EDGE_WEIGHT_TYPE: EXPLICIT\nEDGE_WEIGHT_FORMAT: FULL_MATRIX\nEDGE_WEIGHT_SECTION\n"));
 
     for(int y = 0; y < dimension; y++) {
         for(int x = 0; x < dimension; x++) {
             char weightStr[64];
             sprintf(weightStr, "%f ", weights[y * dimension + x]);
-            ReadLineBuf = gb_append_cstring(ReadLineBuf, weightStr);
+            WriteLine(gb_make_string(weightStr));
         }
-        ReadLineBuf = gb_append_cstring(ReadLineBuf, "\n");
+        WriteLine(gb_make_string("\n"));
     }
 
     ReadProblem();
-    if (SubproblemSize > 0) {
-        if (DelaunayPartitioning)
-            SolveDelaunaySubproblems();
-        else if (KarpPartitioning)
-            SolveKarpSubproblems();
-        else if (KCenterPartitioning)
-            SolveKCenterSubproblems();
-        else if (KMeansPartitioning)
-            SolveKMeansSubproblems();
-        else if (RohePartitioning)
-            SolveRoheSubproblems();
-        else if (MoorePartitioning || SierpinskiPartitioning)
-            SolveSFCSubproblems();
-        else
-            SolveTourSegmentSubproblems();
-        return EXIT_SUCCESS;
-    }
     AllocateStructures();
     CreateCandidateSet();
     InitializeStatistics();

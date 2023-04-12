@@ -1,10 +1,11 @@
-# elkai - A Python solver for the Travelling Salesman Problem / TSP
+#  elkai - a Python library for solving TSP problems
 
 [elkai](https://pypi.org/project/elkai/) is a Python 3 library for solving [travelling salesman problems](https://en.wikipedia.org/wiki/Travelling_salesman_problem):
 
-* ⚡ running fast native code with prebuilt wheels for most platforms
 * 🗺️ based on [LKH](http://akira.ruc.dk/~keld/research/LKH/) by Keld Helsgaun, with proven optimal solutions up to N=315
+* ⚡ running fast native code with prebuilt wheels for most platforms
 * 🛣️ supports asymmetric distances (ATSP)
+* cleaner API and more accurate results than [Google's OR tools](https://developers.google.com/optimization/routing/tsp)
 
 [![Python build](https://github.com/fikisipi/elkai/actions/workflows/python-app.yml/badge.svg)](https://github.com/fikisipi/elkai/actions/workflows/python-app.yml)
 [![image](https://img.shields.io/pypi/v/elkai.svg)](https://pypi.org/project/elkai/)
@@ -12,17 +13,18 @@
 ## Example usage 
 
 ```python
-import numpy as np
 import elkai
 
-M = np.zeros((3, 3), dtype=int)
-M[0, 1] = 4
-M[1, 2] = 5
+distance_matrix = [
+    [0, 4, 0],
+    [0, 0, 5],
+    [0, 0, 0]
+]
 
-solution = elkai.solve_int_matrix(M)
+cities = elkai.solve(distance_matrix, skip_end=False)
 
-print(solution)
-# Output: [0, 2, 1]
+print(cities)
+# Output: [0, 2, 1, 0]
 ```
 
 ```mermaid
@@ -34,38 +36,12 @@ graph TD;
     2-->|0|1;
 ```
 
+> **Note**
+> solve_int_matrix and solve_float_matrix are deprecated in v1.
+
 ## Installation
 
 💾 **To install it** run `pip install elkai`
-
-Documentation
--------------
-
-
-**elkai.solve_int_matrix(matrix: List[List[int]], runs=10) -> List**
-
-* `matrix` is a list of lists or **2D numpy array** containing the distances between cities
-* `runs` is the solver iteration count
-
-An example matrix with 3 cities would be:
-
-```python
-[                 # cities are zero indexed, d() is distance
-   [0, 4,  3],    # d(0, 0), d(0, 1), d(0, 2)
-   [4, 0, 10],    # d(1, 0), d(1, 1), ...
-   [2, 4,  0]     # ... and so on
-]
-```
-
-So, the output would be `[0, 2, 1]` because it's best to visit `0 => 2 => 1 => 0`.
-
-⚠️ The final return to the start is implied and **is NOT** part of the output list, i.e. `len(output) == N`
-
-----
-
-**elkai.solve_float_matrix(matrix: List[List[float]], runs=10) -> List**
-
-Same behaviour as above, with float distances supported. Note that there may be precision issues.
 
 ## Notes
 

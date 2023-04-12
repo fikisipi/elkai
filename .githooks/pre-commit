@@ -1,0 +1,19 @@
+#!/bin/bash
+
+
+SCR=$(cat << EOF
+import re
+import subprocess
+
+repo = subprocess.check_output("git rev-parse --show-toplevel", shell=True).decode('utf8').strip()
+with open(f"{repo}/README.md", "r") as f:
+  md = f.read()
+with open(f"{repo}/setup.py", "r") as f:
+  content = f.read()
+with open(f"{repo}/setup.py", "w") as f:
+  f.write(re.sub(r"long_description=.*?    url", 'long_description="""' + md + '""",\n    url', content, flags=re.DOTALL))
+subprocess.check_output(f"git add {repo}/setup.py", shell=True)
+EOF
+)
+
+python3 -c "$SCR"

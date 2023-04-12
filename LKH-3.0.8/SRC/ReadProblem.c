@@ -373,18 +373,15 @@ static int TwoDWeightType(void);
 static int ThreeDWeightType(void);
 static void Convert2FullMatrix(void);
 
-extern char *ReadLineBuf;
+extern double ReadNumber();
 
 void ReadProblem()
 {
     int i, j, K;
     char *Line, *Keyword;
 
-    if(!strcmp(ProblemFileName, ":empty:")) {
+    if(ProblemFileName == 0 || !strcmp(ProblemFileName, ":stdin:")) {
         ProblemFile = 0;
-        if(!strcmp(ReadLineBuf, ":empty:")) {
-            ReadLineBuf = DEFAULT_PROBLEM;
-        }
     } else {
         if (!(ProblemFile = fopen(ProblemFileName, "r")))
             eprintf("Cannot open PROBLEM_FILE: \"%s\"", ProblemFileName);
@@ -800,7 +797,7 @@ void ReadProblem()
         for (i = 0; i < MergeTourFiles; i++)
             ReadTour(MergeTourFileName[i], &MergeTourFile[i]);
     }
-    free(LastLine);
+//    free(LastLine);
     LastLine = 0;
 }
 
@@ -1341,6 +1338,7 @@ static void Read_EDGE_WEIGHT_SECTION()
     if(WeightFormat != FULL_MATRIX) {
         eprintf("EDGE_WEIGHT_SECTION: Weight format not FULL_MATRIX");
     }
+
     switch (WeightFormat) {
     case FULL_MATRIX:
         for (i = 1; i <= Dim; i++) {
@@ -1350,9 +1348,7 @@ static void Read_EDGE_WEIGHT_SECTION()
                 if (!fscanf(ProblemFile, "%lf", &w))
                     eprintf("EDGE_WEIGHT_SECTION: Missing weight");
                 } else {
-                    w = strtof(ReadLineBuf, &ReadLineBuf);
-                    // if(!sscanf(ReadLineBuf, "%lf", &w))
-                    // eprintf("EDGE_WEIGHT_SECTION: Missing weight");
+                    w = ReadNumber();
                 }
                 W = round(Scale * w);
                 if (Asymmetric) {

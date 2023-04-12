@@ -485,8 +485,6 @@ static char *ReadYesOrNo(int *V);
 #undef max
 static size_t max(size_t a, size_t b);
 
-extern char *ReadLineBuf;
-
 void _Reset1();
 void _Reset2();
 void _Reset3();
@@ -612,9 +610,6 @@ void ReadParameters()
         }
     } else {
         ParameterFile = 0;
-        if(!strcmp(ReadLineBuf, ":empty:")) {
-            ReadLineBuf = DEFAULT_PARAMETERS;
-        }
     }
     while ((Line = ReadLine(ParameterFile))) {
         if (!(Keyword = strtok(Line, Delimiters)))
@@ -1202,9 +1197,8 @@ void ReadParameters()
         DelaunayPure = 0;
     if(ParameterFile != 0)
     fclose(ParameterFile);
-    free(LastLine);
+//    free(LastLine);
     LastLine = 0;
-    ReadLineBuf = ":empty:";
 }
 
 static char *GetFileName(char *Line)

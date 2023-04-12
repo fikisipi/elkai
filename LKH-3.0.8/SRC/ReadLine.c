@@ -20,33 +20,62 @@ static int EndOfLine(FILE * InputFile, int c)
     return EOL;
 }
 
-char *ReadLineBuf = ":empty:";
+char *ReadLineBuf = 0;
+int ReadLinePtr = 0;
 #include "gb_string.h"
+
+void WriteLine(gbString str) {
+    if(ReadLineBuf == 0) {
+        ReadLineBuf = gb_make_string("");
+    }
+    ReadLineBuf = gb_append_string(ReadLineBuf, str);
+}
+
+void ClearLines() {
+    ReadLinePtr = 0;
+    if(ReadLineBuf != 0) {
+        gb_free_string(ReadLineBuf);
+        ReadLineBuf = 0;
+    }
+}
+
+double ReadNumber() {
+    if(ReadLinePtr == 0) return 0;
+    char *k = ReadLineBuf + ReadLinePtr;
+    double output = strtof(ReadLineBuf + ReadLinePtr, &k);
+    ReadLinePtr += k - (ReadLineBuf + ReadLinePtr);
+    return output;
+}
 
 char *ReadLine(FILE * InputFile)
 {
     if(InputFile == 0) {
-        if(ReadLineBuf[0] == '\0') {
+        if(ReadLineBuf[ReadLinePtr] == '\0') {
             return 0;
         }
 
         gbString currentLine = gb_make_string("");
 
-        while(ReadLineBuf[0] != '\0') {
+        while(ReadLineBuf[ReadLinePtr] != '\0') {
             char singleCh[2];
-            singleCh[0] = ReadLineBuf[0];
+            singleCh[0] = ReadLineBuf[ReadLinePtr];
             singleCh[1] = '\0';
 
             currentLine = gb_append_cstring(currentLine, singleCh);
 
-            ReadLineBuf++;
-            if(ReadLineBuf[0] == '\n') {
-                ReadLineBuf++;
+            ReadLinePtr++;
+            if(ReadLineBuf[ReadLinePtr] == '\n') {
+                ReadLinePtr++;
                 break;
             }
         }
 
-        return (char*)currentLine;
+        gbUsize lineSize = gb_string_length(currentLine);
+        char *L = malloc(lineSize + 1);
+        memcpy(L, currentLine, lineSize + 1);
+        gb_free_string(currentLine);
+
+        return L;
     }
 
     int i, c;
