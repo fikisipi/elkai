@@ -2,16 +2,13 @@
 #include "math.h"
 #include "gb_string.h"
 
-// TODO:
-// 1. Change float matrix handling
-// 2. Check for the new type of memory leaks after introducing LKH3
-// 3. Clean up the CMakeLists.txt
-// 4. Add coordinate input
-// 5. Support vehicle routing problems
-// 6. Add readthedocs.io and better README / graph images
+// These are implemented in the LKH-3.0.8/SRC directory.
 
 extern int ElkaiSolveATSP(int dimension, float *weights, int *tour, int runs);
-extern void ElkaiSolveProblem(gbString params, gbString problem, int *tourSize, int *tour);
+extern void ElkaiSolveProblem(gbString params, gbString problem, int *tourSize, int **tourPtr);
+
+// Our copy of LKH is highly modified and does not correspond to the upstream. In the future,
+// we should ship the original LKH folder and then apply a patch *at build time*.
 
 static PyObject *PySolveProblem(PyObject *self, PyObject *args)
 {
@@ -24,7 +21,7 @@ static PyObject *PySolveProblem(PyObject *self, PyObject *args)
     PyObject *arg2 = PyObject_GetItem(args, PyLong_FromLong(1));
 
     if(!PyUnicode_Check(arg1) || !PyUnicode_Check(arg2)) {
-        PyErr_SetString(PyExc_TypeError, "Arguments should be strings");
+        PyErr_SetString(PyExc_TypeError, "Arguments must be strings");
         return 0;
     }
 
@@ -124,9 +121,8 @@ static char elk_docs[] =
     "solve(x): Solve a TSP problem.\n";
 
 static PyMethodDef funcs[] = {
-    {"solve", (PyCFunction) ElkSolve,
-     METH_VARARGS, elk_docs},
-     {"solve_problem", (PyCFunction) PySolveProblem, METH_VARARGS, ""},
+    {"solve", (PyCFunction) ElkSolve, METH_VARARGS, elk_docs},
+    {"solve_problem", (PyCFunction) PySolveProblem, METH_VARARGS, "solve_problem(params: str, problem: str): Solve a LKH problem."},
     {NULL}
 };
 
