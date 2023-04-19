@@ -2,9 +2,10 @@
 
 [elkai](https://pypi.org/project/elkai/) is a Python 3 library for solving [travelling salesman problems](https://en.wikipedia.org/wiki/Travelling_salesman_problem):
 
-* 🗺️ based on [LKH](http://akira.ruc.dk/~keld/research/LKH/) by Keld Helsgaun, with proven optimal solutions up to N=315
-* ⚡ running fast native code with prebuilt wheels for most platforms
-* 🛣️ supports asymmetric distances (ATSP)
+* based on [LKH](http://akira.ruc.dk/~keld/research/LKH/) by Keld Helsgaun, with proven optimal solutions up to N=315
+* running fast native code with prebuilt wheels for most platforms
+* supports asymmetric distances (ATSP)
+
 * cleaner API and more accurate results than [Google's OR tools](https://developers.google.com/optimization/routing/tsp)
 
 [![Python build](https://github.com/fikisipi/elkai/actions/workflows/python-app.yml/badge.svg)](https://github.com/fikisipi/elkai/actions/workflows/python-app.yml)
@@ -37,7 +38,7 @@ graph TD;
 ```
 
 > **Note**
-> solve_int_matrix and solve_float_matrix are deprecated in v1.
+> [solve_int_matrix](https://github.com/fikisipi/elkai/blob/55187e83e7d91ee597b408c8644632fb0ef2687f/elkai/__init__.py#L33) and [solve_float_matrix](https://github.com/fikisipi/elkai/blob/55187e83e7d91ee597b408c8644632fb0ef2687f/elkai/__init__.py#L38) are deprecated in v1.
 
 ## Installation
 
