@@ -55,7 +55,7 @@ print(cities.solve_tsp())
 
 ## License
 
-The LKH native code by Helsgaun is released for non-commercial use only. Therefore the same restriction applies to elkai, which is explained in the `LICENSE` file. If there isn't a prebuilt wheel for your platform, you'll have to follow the `scikit-build` process.
+The LKH native code by Helsgaun is released for non-commercial use only. Therefore the same restriction applies to elkai, which is explained in the `LICENSE` file. 
 
 ## How it works internally
 
@@ -63,7 +63,9 @@ The LKH native code by Helsgaun is released for non-commercial use only. Therefo
 * We added a hook in ReadProblem that allows reading problems from memory/stdin instead of filenames
 * We read the solution from the `Tour` variable and put it in a PyObject (Python list).
 
-⚠️ elkai takes the **global interpreter lock (GIL)** during the solving phase which means two threads cannot solve problems at the same time. If you want to run other workloads at the same time, you have to run another process - for example by using the `multiprocessing` module.""",
+⚠️ elkai takes the **global interpreter lock (GIL)** during the solving phase which means two threads cannot solve problems at the same time. If you want to run other workloads at the same time, you have to run another process - for example by using the `multiprocessing` module.
+
+If there isn't a prebuilt wheel for your platform, you'll have to follow the `scikit-build` process.""",
     url="https://github.com/fikisipi/elkai",
     version="1.0.2",
     packages=['elkai'],
