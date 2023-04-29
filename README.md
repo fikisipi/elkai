@@ -53,3 +53,9 @@ print(cities.solve_tsp())
 ⚠️ elkai takes the **global interpreter lock (GIL)** during the solving phase which means two threads cannot solve problems at the same time. If you want to run other workloads at the same time, you have to run another process - for example by using the `multiprocessing` module.
 
 The LKH native code by Helsgaun is released for non-commercial use only. Therefore the same restriction applies to elkai, which is explained in the `LICENSE` file. If there isn't a prebuilt wheel for your platform, you'll have to follow the `scikit-build` process.
+
+## How it works internally
+
+* We refactored LKH such that it doesn't have global state and you don't need to restart the program in order to run another input problem
+* We added a hook in ReadProblem that allows reading problems from memory/stdin instead of filenames
+* We read the solution from the `Tour` variable and put it in a PyObject (Python list).
