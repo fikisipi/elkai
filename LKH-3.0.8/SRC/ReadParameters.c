@@ -485,14 +485,14 @@ static char *ReadYesOrNo(int *V);
 #undef max
 static size_t max(size_t a, size_t b);
 
-void _Reset1();
-void _Reset2();
-void _Reset3();
-void _Reset4();
-void _Reset5();
-void _Reset6();
-void _Reset7();
-void _Reset8();
+extern void _Reset1();
+extern void _Reset2();
+extern void _Reset3();
+extern void _Reset4();
+extern void _Reset5();
+extern void _Reset6();
+extern void _Reset7();
+extern void _Reset8();
 
 void ReadParameters()
 {
@@ -585,7 +585,7 @@ void ReadParameters()
     SubsequentPatching = 1;
     TimeLimit = DBL_MAX;
     TotalTimeLimit = DBL_MAX;
-    TraceLevel = 1;
+    TraceLevel = 0;
     TSPTW_Makespan = 0;
 
     if (ParameterFileName) {

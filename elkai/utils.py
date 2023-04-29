@@ -25,3 +25,13 @@ def flatten_matrix(matrix):
         for column in row:
             flattened.append(column)
     return flattened
+
+def is_2d_matrix(obj):
+    row_count = len(obj)
+    for row in obj:
+        if len(row) != row_count:
+            return False
+        for col in row:
+            if not isinstance(col, (int, float)):
+                return False
+    return True

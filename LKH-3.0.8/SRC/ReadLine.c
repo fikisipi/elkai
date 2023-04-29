@@ -47,11 +47,26 @@ double ReadNumber() {
     return output;
 }
 
+int ReadNumberInt() {
+    if(ReadLinePtr == 0) return 0;
+    char *k = ReadLineBuf + ReadLinePtr;
+    int output = strtol(ReadLineBuf + ReadLinePtr, &k, 10);
+    ReadLinePtr += k - (ReadLineBuf + ReadLinePtr);
+    return output;
+}
+
+static gbString ReadLastLine = 0;
+
 char *ReadLine(FILE * InputFile)
 {
     if(InputFile == 0) {
         if(ReadLineBuf[ReadLinePtr] == '\0') {
             return 0;
+        }
+
+        if(ReadLastLine != 0) {
+            gb_free_string(ReadLastLine);
+            ReadLastLine = 0;
         }
 
         gbString currentLine = gb_make_string("");
@@ -70,12 +85,8 @@ char *ReadLine(FILE * InputFile)
             }
         }
 
-        gbUsize lineSize = gb_string_length(currentLine);
-        char *L = malloc(lineSize + 1);
-        memcpy(L, currentLine, lineSize + 1);
-        gb_free_string(currentLine);
-
-        return L;
+          ReadLastLine = currentLine;
+          return currentLine;
     }
 
     int i, c;

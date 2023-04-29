@@ -4,7 +4,7 @@
 
 // These are implemented in the LKH-3.0.8/SRC directory.
 
-extern int ElkaiSolveATSP(int dimension, float *weights, int *tour, int runs);
+extern int ElkaiDeprecatedSolve(int dimension, float *weights, int *tour, int runs);
 extern void ElkaiSolveProblem(gbString params, gbString problem, int *tourSize, int **tourPtr);
 
 // Our copy of LKH is highly modified and does not correspond to the upstream. In the future,
@@ -47,12 +47,14 @@ static PyObject *PySolveProblem(PyObject *self, PyObject *args)
         PyObject *tourElement = PyLong_FromLong((long)(tourPtr[i]));
         PyList_SetItem(list, i, tourElement);
     }
+
     gb_free_string(params);
     gb_free_string(problem);
+
     return list;
 }
 
-static PyObject *ElkSolve(PyObject *self, PyObject *args)
+static PyObject *PyDeprecatedSolve(PyObject *self, PyObject *args)
 {
     // *args of a vararg Python function is a tuple
     // of unknown length.
@@ -102,7 +104,7 @@ static PyObject *ElkSolve(PyObject *self, PyObject *args)
         weights[i] = (float)justNumber_i;
     }
 
-    ElkaiSolveATSP(pyLenSqrt, weights, tourBuff, runCount);
+    ElkaiDeprecatedSolve(pyLenSqrt, weights, tourBuff, runCount);
 
     free(weights);
     free(matrixBuff);
@@ -117,11 +119,8 @@ static PyObject *ElkSolve(PyObject *self, PyObject *args)
     return list;
 }
 
-static char elk_docs[] =
-    "solve(x): Solve a TSP problem.\n";
-
 static PyMethodDef funcs[] = {
-    {"solve", (PyCFunction) ElkSolve, METH_VARARGS, elk_docs},
+    {"_deprecated_solve", (PyCFunction) PyDeprecatedSolve, METH_VARARGS, "_deprecated_solve(matrix, runs): Solves an ATSP problem."},
     {"solve_problem", (PyCFunction) PySolveProblem, METH_VARARGS, "solve_problem(params: str, problem: str): Solve a LKH problem."},
     {NULL}
 };

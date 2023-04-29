@@ -7,6 +7,8 @@ include_directories(${CMAKE_SOURCE_DIR}/LKH-3.0.8/SRC/INCLUDE)
 file(GLOB LKH_SRC "LKH-3.0.8/SRC/*.c")
 
 add_library(_elkai MODULE elkai/_elkai.c ${LKH_SRC})
+target_compile_definitions(_elkai PRIVATE TWO_LEVEL_TREE)
+
 python_extension_module(_elkai)
 
 install(TARGETS _elkai LIBRARY DESTINATION elkai)

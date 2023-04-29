@@ -374,6 +374,7 @@ static int ThreeDWeightType(void);
 static void Convert2FullMatrix(void);
 
 extern double ReadNumber();
+extern int ReadNumberInt();
 
 void ReadProblem()
 {
@@ -470,7 +471,7 @@ void ReadProblem()
         else if (!strcmp(Keyword, "TYPE"))
             Read_TYPE();
         else
-            eprintf("Unknown keyword: %s", Keyword);
+            return eprintf("Unknown keyword: %s", Keyword);
     }
     Swaps = 0;
 
@@ -1687,8 +1688,9 @@ static void Read_NODE_COORD_SECTION()
     if (ProblemType == HPP)
         Dimension--;
     for (i = 1; i <= Dim; i++) {
-        if (!fscanint(ProblemFile, &Id))
-            eprintf("NODE_COORD_SECTION: Missing nodes");
+        Id = ReadNumberInt();
+        // if (!fscanint(ProblemFile, &Id))
+            // eprintf("NODE_COORD_SECTION: Missing nodes");
         if (Id <= 0 || Id > Dimension)
             eprintf("NODE_COORD_SECTION: Node number out of range: %d",
                     Id);
@@ -1697,17 +1699,22 @@ static void Read_NODE_COORD_SECTION()
             eprintf("NODE_COORD_SECTION: Node number occurs twice: %d",
                     N->Id);
         N->V = 1;
-        if (!fscanf(ProblemFile, "%lf", &N->X))
-            eprintf("NODE_COORD_SECTION: Missing X-coordinate");
-        if (!fscanf(ProblemFile, "%lf", &N->Y))
-            eprintf("NODE_COORD_SECTION: Missing Y-coordinate");
-        if (CoordType == THREED_COORDS
-            && !fscanf(ProblemFile, "%lf", &N->Z))
-            eprintf("NODE_COORD_SECTION: Missing Z-coordinate");
-        if (Name && !strcmp(Name, "d657")) {
-            N->X = (float) N->X;
-            N->Y = (float) N->Y;
+        N->X = ReadNumber();
+        // if (!fscanf(ProblemFile, "%lf", &N->X))
+            // eprintf("NODE_COORD_SECTION: Missing X-coordinate");
+        // if (!fscanf(ProblemFile, "%lf", &N->Y))
+            // eprintf("NODE_COORD_SECTION: Missing Y-coordinate");
+        N->Y = ReadNumber();
+        if(CoordType == THREED_COORDS) {
+            N->Z = ReadNumber();
         }
+        // if (CoordType == THREED_COORDS
+        //     && !fscanf(ProblemFile, "%lf", &N->Z))
+        //     eprintf("NODE_COORD_SECTION: Missing Z-coordinate");
+        // if (Name && !strcmp(Name, "d657")) {
+        //     N->X = (float) N->X;
+        //     N->Y = (float) N->Y;
+        // }
     }
     N = FirstNode;
     do
