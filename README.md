@@ -48,9 +48,7 @@ print(cities.solve_tsp())
 > **Note**
 > [solve_int_matrix](https://github.com/fikisipi/elkai/blob/55187e83e7d91ee597b408c8644632fb0ef2687f/elkai/__init__.py#L33) and [solve_float_matrix](https://github.com/fikisipi/elkai/blob/55187e83e7d91ee597b408c8644632fb0ef2687f/elkai/__init__.py#L38) are deprecated in v1. Also, they don't contain the origin arrival in the result list by default.
 
-## Notes
-
-⚠️ elkai takes the **global interpreter lock (GIL)** during the solving phase which means two threads cannot solve problems at the same time. If you want to run other workloads at the same time, you have to run another process - for example by using the `multiprocessing` module.
+## License
 
 The LKH native code by Helsgaun is released for non-commercial use only. Therefore the same restriction applies to elkai, which is explained in the `LICENSE` file. If there isn't a prebuilt wheel for your platform, you'll have to follow the `scikit-build` process.
 
@@ -59,3 +57,5 @@ The LKH native code by Helsgaun is released for non-commercial use only. Therefo
 * We refactored LKH such that it doesn't have global state and you don't need to restart the program in order to run another input problem
 * We added a hook in ReadProblem that allows reading problems from memory/stdin instead of filenames
 * We read the solution from the `Tour` variable and put it in a PyObject (Python list).
+
+⚠️ elkai takes the **global interpreter lock (GIL)** during the solving phase which means two threads cannot solve problems at the same time. If you want to run other workloads at the same time, you have to run another process - for example by using the `multiprocessing` module.
