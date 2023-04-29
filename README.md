@@ -24,11 +24,11 @@
 ```python
 import elkai
 
-cities = elkai.DistanceMatrix([
-    [0, 4, 0],
-    [0, 0, 5],
-    [0, 0, 0]
-])
+cities = elkai.Coordinates2D({
+    'city1': (0, 0),
+    'city2': (0, 4),
+    'city3': (5, 0)
+})
 
 print(cities.solve_tsp())
 ```
@@ -36,11 +36,11 @@ print(cities.solve_tsp())
 ```python
 import elkai
 
-cities = elkai.Coordinates2D({
-    'city1': (0, 0),
-    'city2': (0, 4),
-    'city3': (5, 0)
-})
+cities = elkai.DistanceMatrix([
+    [0, 4, 0],
+    [0, 0, 5],
+    [0, 0, 0]
+])
 
 print(cities.solve_tsp())
 ```
