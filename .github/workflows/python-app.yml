@@ -48,12 +48,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Python wheels manylinux build
-      uses: RalfG/python-wheels-manylinux-build@v0.7.1-manylinux2010_x86_64
-      with:
-        python-versions: 'cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310'
-        build-requirements: 'cmake scikit-build ninja'
+      uses: pypa/cibuildwheel
+      env:
+        CIBW_ARCHS: auto64  # only 64-bit
+        CIBW_SKIP: "pp* *-musllinux_*"  # no PyPy builds
+        CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014  # centos 7
+        CIBW_BEFORE_BUILD: python -m pip install scikit-build ninja
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.3.1
       with:
         name: "elkai-manylinux"
-        path: dist/*.whl
+        path: wheelhouse/*.whl
