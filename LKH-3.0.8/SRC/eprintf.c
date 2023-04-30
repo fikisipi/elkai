@@ -3,7 +3,9 @@
 
 #ifdef PYTHON_ERR_HANDLE
 
-int ErrorHappened;
+#include "setjmp.h"
+
+jmp_buf ErrorJumpBuffer;
 
 #include <Python.h>
 
@@ -17,7 +19,7 @@ void eprintf(const char *fmt, ...)
     va_end(args);
 
     PyErr_SetString(PyExc_TypeError, err);
-    ErrorHappened = 1;
+    longjmp(ErrorJumpBuffer, 1);
 }
 
 #else

@@ -17,7 +17,7 @@ class DistanceMatrix(object):
             raise ValueError("dimension must be at least 3")
 
         params = f"RUNS = {runs}\nPROBLEM_FILE = :stdin:\n"
-        
+
         problem_type = "ATSP"
         if utils.is_symmetric_matrix(self.distances):
             problem_type = "TSP"
@@ -26,8 +26,12 @@ class DistanceMatrix(object):
         for row in self.distances:
             problem += " ".join(map(str, row)) + "\n"
 
-        solution = _elkai.solve_problem(params, problem)
+        solution: List[int] = _elkai.solve_problem(params, problem)
+
+        # output is one-indexed and doesn't contain the departure to first city by default
+        # let's add the departure and fix indices
         solution.append(solution[0])
+        solution = [idx - 1 for idx in solution]
 
         return solution
 
@@ -41,6 +45,9 @@ class Coordinates2D(object):
         for key in coords:
             if not len(coords[key]) == 2:
                 raise ValueError("coords must be a dictionary 'city name': (x, y)")
+            for c in coords[key]:
+                if not isinstance(c, (int, float)):
+                    raise ValueError("coords must be a dictionary 'city name': (x, y)")
         
         self.coords = coords
 
@@ -50,6 +57,7 @@ class Coordinates2D(object):
         
         keys = list(self.coords.keys())
         
+        # tsplib expects one-indexed integer keys, so we map our city names to 1..n
         keys_to_numbers = {k: (i + 1) for i, k in enumerate(keys)}
         numbers_to_keys = {num: key for key, num in keys_to_numbers.items()}
 
@@ -60,9 +68,12 @@ class Coordinates2D(object):
             coord_list = [str(x) for x in self.coords[key]]
             problem += f"{num} {' '.join(coord_list)}\n"
 
-        print(problem)
 
-        solution = _elkai.solve_problem(params, problem)
+        solution: List[int] = _elkai.solve_problem(params, problem)
+        
+        # solution is one-indexed and doesn't contain the departure to first city by default
+        # let's add the departure and map indices to city names
         solution.append(solution[0])
-        solution_as_keys = [numbers_to_keys[num] for num in solution]
+        solution_as_keys: List[str] = [numbers_to_keys[num] for num in solution]
+
         return solution_as_keys

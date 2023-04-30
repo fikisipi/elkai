@@ -8,6 +8,7 @@ file(GLOB LKH_SRC "LKH-3.0.8/SRC/*.c")
 
 add_library(_elkai MODULE elkai/_elkai.c ${LKH_SRC})
 target_compile_definitions(_elkai PRIVATE TWO_LEVEL_TREE)
+target_compile_definitions(_elkai PRIVATE PYTHON_ERR_HANDLE)
 
 python_extension_module(_elkai)
 

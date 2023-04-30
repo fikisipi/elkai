@@ -1,11 +1,13 @@
 #include <Python.h>
 #include "math.h"
 #include "gb_string.h"
+#include "setjmp.h"
 
 // These are implemented in the LKH-3.0.8/SRC directory.
 
 extern int ElkaiDeprecatedSolve(int dimension, float *weights, int *tour, int runs);
 extern void ElkaiSolveProblem(gbString params, gbString problem, int *tourSize, int **tourPtr);
+extern jmp_buf ErrorJumpBuffer;
 
 // Our copy of LKH is highly modified and does not correspond to the upstream. In the future,
 // we should ship the original LKH folder and then apply a patch *at build time*.
@@ -33,6 +35,14 @@ static PyObject *PySolveProblem(PyObject *self, PyObject *args)
 
     int tourSize = 0;
     int *tourPtr;
+
+    int jmpRes;
+    jmpRes = setjmp(ErrorJumpBuffer);
+    if(jmpRes != 0) {
+        gb_free_string(params);
+        gb_free_string(problem);
+        return 0;
+    }
 
     ElkaiSolveProblem(params, problem, &tourSize, &tourPtr);
 
