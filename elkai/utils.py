@@ -35,3 +35,11 @@ def is_2d_matrix(obj):
             if not isinstance(col, (int, float)):
                 return False
     return True
+
+def is_symmetric_matrix(obj):
+    N = len(obj)
+    for i in range(N):
+        for j in range(N):
+            if (obj[i][j] != obj[j][i]):
+                return False
+    return True

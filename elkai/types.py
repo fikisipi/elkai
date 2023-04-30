@@ -17,7 +17,12 @@ class DistanceMatrix(object):
             raise ValueError("dimension must be at least 3")
 
         params = f"RUNS = {runs}\nPROBLEM_FILE = :stdin:\n"
-        problem = f"TYPE : ATSP\nDIMENSION : {dimension}\nEDGE_WEIGHT_TYPE : EXPLICIT\nEDGE_WEIGHT_FORMAT : FULL_MATRIX\nEDGE_WEIGHT_SECTION\n"
+        
+        problem_type = "ATSP"
+        if utils.is_symmetric_matrix(self.distances):
+            problem_type = "TSP"
+
+        problem = f"TYPE : {problem_type}\nDIMENSION : {dimension}\nEDGE_WEIGHT_TYPE : EXPLICIT\nEDGE_WEIGHT_FORMAT : FULL_MATRIX\nEDGE_WEIGHT_SECTION\n"
         for row in self.distances:
             problem += " ".join(map(str, row)) + "\n"
 
@@ -44,19 +49,20 @@ class Coordinates2D(object):
             raise ValueError("runs must be a positive integer")
         
         keys = list(self.coords.keys())
+        
+        keys_to_numbers = {k: (i + 1) for i, k in enumerate(keys)}
+        numbers_to_keys = {num: key for key, num in keys_to_numbers.items()}
+
         dimension = len(keys)
         params = f"RUNS = {runs}\nPROBLEM_FILE = :stdin:\n"
         problem = f"TYPE : TSP\nDIMENSION : {dimension}\nEDGE_WEIGHT_TYPE : EUC_2D\nNODE_COORD_SECTION\n"
-        for idx, key in enumerate(keys):
-            one_idx = idx + 1
-            problem += f"{one_idx} {self.coords[key][0]} {self.coords[key][1]}\n"
-        problem += "EOF\n"
+        for key, num in keys_to_numbers.items():
+            coord_list = [str(x) for x in self.coords[key]]
+            problem += f"{num} {' '.join(coord_list)}\n"
+
+        print(problem)
 
         solution = _elkai.solve_problem(params, problem)
         solution.append(solution[0])
-        solution_as_keys = []
-        for one_idx in solution:
-            zero_idx = one_idx - 1
-            solution_as_keys.append(keys[zero_idx])
-
+        solution_as_keys = [numbers_to_keys[num] for num in solution]
         return solution_as_keys
