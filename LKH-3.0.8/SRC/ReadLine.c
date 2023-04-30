@@ -20,9 +20,11 @@ static int EndOfLine(FILE * InputFile, int c)
     return EOL;
 }
 
+#include "gb_string.h"
+
 char *ReadLineBuf = 0;
 int ReadLinePtr = 0;
-#include "gb_string.h"
+static gbString ReadLastLine = 0;
 
 void WriteLine(gbString str) {
     if(ReadLineBuf == 0) {
@@ -36,6 +38,10 @@ void ClearLines() {
     if(ReadLineBuf != 0) {
         gb_free_string(ReadLineBuf);
         ReadLineBuf = 0;
+    }
+    if(ReadLastLine != 0) {
+        gb_free_string(ReadLastLine);
+        ReadLastLine = 0;
     }
 }
 
@@ -54,8 +60,6 @@ int ReadNumberInt() {
     ReadLinePtr += k - (ReadLineBuf + ReadLinePtr);
     return output;
 }
-
-static gbString ReadLastLine = 0;
 
 char *ReadLine(FILE * InputFile)
 {

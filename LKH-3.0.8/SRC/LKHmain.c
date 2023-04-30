@@ -85,6 +85,8 @@ void ElkaiSolveProblem(gbString params, gbString problem, int *tourSize, int **t
     WriteLine(problem);
 
     ReadProblem();
+    
+    ClearLines();
 
     AllocateStructures();
     CreateCandidateSet();
