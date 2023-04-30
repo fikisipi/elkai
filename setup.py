@@ -60,8 +60,9 @@ The LKH native code by Helsgaun is released for non-commercial use only. Therefo
 ## How it works internally
 
 * We refactored LKH such that it doesn't have global state and you don't need to restart the program in order to run another input problem
-* We added a hook in ReadProblem that allows reading problems from memory/stdin instead of filenames
+* We added a hook in ReadProblem that allows reading problems from memory instead of files
 * We read the solution from the `Tour` variable and put it in a PyObject (Python list).
+* ✓ Valgrind passed on `d3d8c12`.
 
 ⚠️ elkai takes the **global interpreter lock (GIL)** during the solving phase which means two threads cannot solve problems at the same time. If you want to run other workloads at the same time, you have to run another process - for example by using the `multiprocessing` module.
 
