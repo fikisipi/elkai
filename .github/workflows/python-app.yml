@@ -26,22 +26,6 @@ jobs:
         name: "elkai-${{ matrix.os }}-${{ matrix.python-version }}.whl"
         path: dist/*.whl
 
-  # build-linux:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Python wheels manylinux build
-  #     uses: RalfG/python-wheels-manylinux-build@v0.7.1
-  #     with:
-  #       python-versions: 'cp311-cp311'
-  #       build-requirements: 'cmake scikit-build ninja'
-  #   - name: Upload a Build Artifact
-  #     uses: actions/upload-artifact@v2.3.1
-  #     with:
-  #       name: "elkai-manylinux"
-  #       path: dist/*.whl
-        
   build-linux:
     runs-on: ubuntu-latest
 
