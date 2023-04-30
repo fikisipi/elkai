@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11.0)
+cmake_minimum_required(VERSION 3.18...3.22)
 project(elkai)
 
 find_package(PythonExtensions REQUIRED)
