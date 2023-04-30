@@ -1,6 +1,6 @@
 #define HAVE_GETRUSAGE
 /* Undefine if you don't have the getrusage function */
-/* #undef HAVE_GETRUSAGE */
+#undef HAVE_GETRUSAGE
 
 /*
  * The GetTime function is used to measure execution time.
