@@ -197,6 +197,11 @@ void ElkaiSolveProblem(gbString params, gbString problem, int *tourSize, int **t
         SRandom(++Seed);
     }
 
+    if(ProblemFileName != 0) {
+        free(ProblemFileName);
+        ProblemFileName = 0;
+    }
+
     *tourSize = ReadableTourSize;
 
     if(tourPtr != 0) {
@@ -383,4 +388,23 @@ int main(int argc, char * argv[])
     for(int i = 0; i < tourSize; i++) {
         printf("%d ", tour[i]);
     }
+    printf("\niteration 1 complete.\n");
+
+    params = gb_make_string("RUNS = 1\nPROBLEM_FILE = :stdin:\n");
+    problem = gb_make_string(
+        "TYPE : TSP\nDIMENSION : 4\nEDGE_WEIGHT_TYPE : EUC_2D\nNODE_COORD_SECTION\n"
+        "1 0.0 0.0\n"
+        "2 10.0 -5.3\n"
+        "3 1.0 -2.1\n"
+        "4 11.0 -3.0\n"
+        "EOF\n"
+        );
+    ElkaiSolveProblem(params, problem, &tourSize, &tour);
+    gb_free_string(params);
+    gb_free_string(problem);
+    for(int i = 0; i < tourSize; i++) {
+        printf("%d ", tour[i]);
+    }
+
+    printf("\niteration 2 complete.\n");
 }
