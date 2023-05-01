@@ -38,7 +38,6 @@ jobs:
         CIBW_SKIP: "pp* *-musllinux_*"  # no PyPy builds
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014  # centos 7
         CIBW_BEFORE_BUILD: python -m pip install scikit-build cmake
-        CIBW_ENVIRONMENT: PYTHON_INCLUDE_DIRS="LKH-3.0.8/SRC/INCLUDE"
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.3.1
       with:

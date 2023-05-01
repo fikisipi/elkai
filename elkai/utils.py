@@ -1,4 +1,6 @@
-def path_distance(path, distance_matrix):
+from typing import List, Any
+
+def path_distance(path: List[int], distance_matrix: List[List[float]]):
     """Returns the distance of a path given a distance matrix."""
     dist = 0
     last_idx = path[0]
@@ -13,7 +15,7 @@ def path_distance(path, distance_matrix):
 
     return dist
 
-def flatten_matrix(matrix):
+def flatten_matrix(matrix: List[List[float]]) -> List[float]:
     """Flattens a 2D matrix into a list."""
     N = len(matrix)
     if N <= 2:
@@ -26,7 +28,8 @@ def flatten_matrix(matrix):
             flattened.append(column)
     return flattened
 
-def is_2d_matrix(obj):
+def is_2d_matrix(obj: Any) -> bool:
+    """Checks if obj is a 2d matrix of ints/floats."""
     row_count = len(obj)
     for row in obj:
         if len(row) != row_count:
@@ -36,7 +39,8 @@ def is_2d_matrix(obj):
                 return False
     return True
 
-def is_symmetric_matrix(obj):
+def is_symmetric_matrix(obj: List[List[float]]) -> bool:
+    """Returns True if obj is a symmetric matrix, False otherwise."""
     N = len(obj)
     for i in range(N):
         for j in range(N):

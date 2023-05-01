@@ -8,7 +8,7 @@ class DistanceMatrix(object):
         
         self.distances = distances
 
-    def solve_tsp(self, runs=10):
+    def solve_tsp(self, runs=10) -> List[int]:
         if not isinstance(runs, int) or runs < 1:
             raise ValueError("runs must be a positive integer")
         
@@ -51,7 +51,7 @@ class Coordinates2D(object):
         
         self.coords = coords
 
-    def solve_tsp(self, runs=10):
+    def solve_tsp(self, runs=10) -> List[str]:
         if not isinstance(runs, int) or runs < 1:
             raise ValueError("runs must be a positive integer")
         
