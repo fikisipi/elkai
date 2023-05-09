@@ -5,3 +5,10 @@ build-backend = "scikit_build_core.build"
 [project]
 name = "elkai"
 version = "2.0.0"
+description = "elkai is a Python library for solving travelling salesman problems (TSP) based on LKH 3"
+url = "https://github.com/fikisipi/elkai"
+authors = [ { name = "Filip Dimitrovski" } ]
+requires-python = ">=3.7"
+readme = "README.md"
+keywords = ["tsp", "travelling salesman problem", "solver", "atsp", "salesman", "travelling", "problem"]
+license = {text = "elkai License"}
