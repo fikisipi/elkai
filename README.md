@@ -30,7 +30,7 @@ cities = elkai.Coordinates2D({
     'city3': (5, 0)
 })
 
-print(cities.solve_tsp())
+print(cities.solve_tsp()) # Output: ['city1', 'city2', 'city3', 'city1']
 ```
 
 ```python
@@ -42,7 +42,7 @@ cities = elkai.DistanceMatrix([
     [0, 0, 0]
 ])
 
-print(cities.solve_tsp())
+print(cities.solve_tsp()) # Output: [0, 2, 1, 0]
 ```
 
 > **Note**
