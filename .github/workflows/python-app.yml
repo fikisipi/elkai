@@ -37,7 +37,7 @@ jobs:
         CIBW_ARCHS: auto64  # only 64-bit
         CIBW_SKIP: "pp* *-musllinux_*"  # no PyPy builds
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014  # centos 7
-        CIBW_BEFORE_BUILD: "python -m pip install scikit-build cmake && python -c \"import skbuild; f = skbuild.__file__.replace('__init__.py', 'resources/cmake/FindPythonExtensions.cmake'); with open(f, 'w+') as ff: content = ff.read(); ff.truncate(); ff.write(content.replace('NOT _is_non_lib', 'FALSE'))\""
+        CIBW_BEFORE_BUILD: "python -m pip install scikit-build cmake && python -c \"import skbuild; f = skbuild.__file__.replace('__init__.py', 'resources/cmake/FindPythonExtensions.cmake'); ff = open(f, 'w+'); content = ff.read(); ff.truncate(); ff.write(content.replace('NOT _is_non_lib', 'FALSE'))\""
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.3.1
       with:
