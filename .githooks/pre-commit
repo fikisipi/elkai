@@ -16,4 +16,4 @@ subprocess.check_output(f"git add {repo}/setup.py", shell=True)
 EOF
 )
 
-python3 -c "$SCR"
+# python3 -c "$SCR"

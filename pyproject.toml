@@ -1,8 +1,7 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "scikit-build>=0.16",
-    "cmake>=3.18",
-    "ninja",
-]
-build-backend = "setuptools.build_meta"
+requires = ["scikit-build-core"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "elkai"
+version = "2.0.0"

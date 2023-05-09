@@ -186,6 +186,7 @@ include LKH-3.0.8/pr2392.par
 include LKH-3.0.8/pr2392.tsp
 include LKH-3.0.8/whizzkids96.atsp
 include LKH-3.0.8/whizzkids96.par
+include MANIFEST.in
 include README.md
 include elkai/__init__.py
 include elkai/_elkai.c
