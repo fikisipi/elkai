@@ -1,15 +1,15 @@
-cmake_minimum_required(VERSION 3.11.0)
+#cmake_minimum_required(VERSION 3.18...3.22)
+cmake_minimum_required(VERSION 3.15...3.26)
 project(elkai)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-find_package(PythonExtensions REQUIRED)
 
-include_directories(${CMAKE_SOURCE_DIR}/LKH-2.0.9/SRC/INCLUDE)
-file(GLOB LKH_SRC "LKH-2.0.9/SRC/*.c")
-add_library(LKH ${LKH_SRC})
-target_compile_definitions(LKH PRIVATE TWO_LEVEL_TREE)
+find_package(Python
+  COMPONENTS Interpreter Development.Module REQUIRED)
 
-add_library(_elkai MODULE elkai/_elkai.c)
-python_extension_module(_elkai)
-target_link_libraries(_elkai LKH)
+include_directories(LKH-3.0.8/SRC/INCLUDE)
+file(GLOB LKH_SRC "LKH-3.0.8/SRC/*.c")
+
+python_add_library(_elkai MODULE elkai/_elkai.c ${LKH_SRC})
+target_compile_definitions(_elkai PRIVATE TWO_LEVEL_TREE)
+target_compile_definitions(_elkai PRIVATE PYTHON_ERR_HANDLE)
 
 install(TARGETS _elkai LIBRARY DESTINATION elkai)

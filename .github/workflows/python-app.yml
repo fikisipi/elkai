@@ -5,7 +5,7 @@ jobs:
   build:
     strategy:
           matrix:
-            python-version: [ '3.6', '3.7', '3.8', '3.9', '3.10', '3.11' ]
+            python-version: [ '3.7', '3.8', '3.9', '3.10', '3.11' ]
             os: ['windows-latest', 'macos-latest']
     runs-on: ${{ matrix.os }}
     steps:
@@ -17,9 +17,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install wheel cmake
-        pip install scikit-build ninja
-        python setup.py bdist_wheel
+        pip install wheel build
+        python -m build
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.3.1
       with:
@@ -32,28 +31,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Python wheels manylinux build
-      uses: RalfG/python-wheels-manylinux-build@v0.7.1
-      with:
-        python-versions: 'cp311-cp311'
-        build-requirements: 'cmake scikit-build ninja'
+      uses: pypa/cibuildwheel@v2.12.3
+      env:
+        CIBW_ARCHS: auto64  # only 64-bit
+        CIBW_SKIP: "pp* *-musllinux_* cp36*"  # no PyPy builds
+        CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014  # centos 7
+        CIBW_BEFORE_BUILD: "python -m pip install build"
+        # CIBW_BEFORE_BUILD: "python -m pip install scikit-build cmake && python -c \"import skbuild; f = skbuild.__file__.replace('__init__.py', 'resources/cmake/FindPythonExtensions.cmake'); ff = open(f, 'w+'); content = ff.read(); ff.truncate(); ff.write(content.replace('NOT _is_non_lib', 'FALSE'))\""
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.3.1
       with:
         name: "elkai-manylinux"
-        path: dist/*.whl
-        
-  build-linux-old:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Python wheels manylinux build
-      uses: RalfG/python-wheels-manylinux-build@v0.7.1-manylinux2010_x86_64
-      with:
-        python-versions: 'cp36-cp36m cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310'
-        build-requirements: 'cmake scikit-build ninja'
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.3.1
-      with:
-        name: "elkai-manylinux"
-        path: dist/*.whl
+        path: wheelhouse/*.whl
