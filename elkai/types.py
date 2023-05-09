@@ -2,13 +2,17 @@ from typing import List, Dict, Tuple
 from . import _elkai, utils
 
 class DistanceMatrix(object):
+    """A structure representing a matrix of float/int weights/distances."""
     def __init__(self, distances: List[List[float]]):
+        """Creates the matrix structure representing a list of lists (2D matrix) of floats/ints."""
+
         if not utils.is_2d_matrix(distances):
             raise ValueError("distances must be a 2D matrix of floats/ints")
         
         self.distances = distances
 
     def solve_tsp(self, runs=10) -> List[int]:
+        """Returns a list of indices that represent the TSP tour. You can adjust solver iterations with the runs parameter."""
         if not isinstance(runs, int) or runs < 1:
             raise ValueError("runs must be a positive integer")
         
@@ -37,7 +41,11 @@ class DistanceMatrix(object):
 
 
 class Coordinates2D(object):
+    """A structure representing coordinates of type {'city name': (x, y), ...}"""
+
     def __init__(self, coords: Dict[str, Tuple[float, float]]):
+        """Creates the structure representing coordinates of type {'city name': (x, y), ...}"""
+
         if not isinstance(coords, dict):
             raise ValueError("coords must be a dictionary 'city name': (x, y)")
         if len(coords) < 3:
@@ -52,6 +60,8 @@ class Coordinates2D(object):
         self.coords = coords
 
     def solve_tsp(self, runs=10) -> List[str]:
+        """Returns a list of city names in the order of the TSP tour. You can adjust solver iterations with the runs parameter."""
+        
         if not isinstance(runs, int) or runs < 1:
             raise ValueError("runs must be a positive integer")
         
