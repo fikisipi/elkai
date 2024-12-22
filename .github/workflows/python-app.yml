@@ -39,7 +39,7 @@ jobs:
         CIBW_BEFORE_BUILD: "python -m pip install build"
         # CIBW_BEFORE_BUILD: "python -m pip install scikit-build cmake && python -c \"import skbuild; f = skbuild.__file__.replace('__init__.py', 'resources/cmake/FindPythonExtensions.cmake'); ff = open(f, 'w+'); content = ff.read(); ff.truncate(); ff.write(content.replace('NOT _is_non_lib', 'FALSE'))\""
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@v4
       with:
         name: "elkai-manylinux"
         path: wheelhouse/*.whl
